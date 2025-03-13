@@ -167,8 +167,13 @@ void loop() {
                     WiFi.begin(ssid, passwd);
                     M5Cardputer.Lcd.fillScreen(TFT_BLACK);
                     M5Cardputer.Lcd.drawString("Connecting", 10, 15);
+                    unsigned long startAttemptTime = millis();
                     while (WiFi.status() != WL_CONNECTED) {
-                        delay(500);
+                        if (millis() - startAttemptTime >= TIMEOUT) {
+                            wait("TIMEOUT!", true);
+                            break;
+                        }
+                        delay(200);
                     }
                     wait("Connected succesfully", true);
                 } else {
@@ -180,6 +185,7 @@ void loop() {
                 const String url = prompt("URL: ");
                 wait("Getting request", true);
                 http.begin(client, "http://" + url);
+                http.setTimeout(TIMEOUT/1000);
                 const int httpCode = http.GET();
                 if (httpCode > 0) {
                     if (http.getString().length() > 0)

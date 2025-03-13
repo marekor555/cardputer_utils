@@ -11,6 +11,7 @@
 #define PROMPT "> "
 #define PRIM_FONT_SIZE 2
 #define SEC_FONT_SIZE 1
+#define TIMEOUT 5000
 
 #define IR_PIN 44
 
