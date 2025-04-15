@@ -35,4 +35,6 @@ void scrollText(String msg, bool scrollX);
  */
 void scrollTextArr(std::vector<String> msg, bool scrollX);
 
+void graph();
+
 #endif

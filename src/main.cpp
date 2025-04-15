@@ -13,6 +13,7 @@ int speed = 1;
 int timer = 0;
 
 
+
 /**
  * play music
  */
@@ -91,25 +92,25 @@ void irSam() {
                 switch (status.word[0]) {
                     case ';':
                         IrSender.sendSamsungMSB(0xE0E0E01F, 32);
-                    break;
+                        break;
                     case '.':
                         IrSender.sendSamsungMSB(0xE0E0D02F, 32);
-                    break;
+                        break;
                     case ',':
                         IrSender.sendSamsungMSB(0xE0E008F7, 32);
-                    break;
+                        break;
                     case '/':
                         IrSender.sendSamsungMSB(0xE0E048B7, 32);
-                    break;
+                        break;
                     case 'm':
                         IrSender.sendSamsungMSB(0xE0E0F00F, 32);
-                    break;
+                        break;
                     case 'o':
                         IrSender.sendSamsungMSB(0xE0E0E21D, 32);
-                    break;
+                        break;
                     case 'p':
                         IrSender.sendSamsungMSB(0xE0E052AD, 32);
-                    break;
+                        break;
                     default:
                         break;
                 }
@@ -175,37 +176,40 @@ void loop() {
                         }
                         delay(200);
                     }
-                    wait("Connected succesfully", true);
+                    wait("Connected successfully", true);
                 } else {
                     wait("Already connected", true);
                 }
             } else if (text == "req") {
-                WiFiClient client;
-                HTTPClient http;
-                const String url = prompt("URL: ");
-                wait("Getting request", true);
-                http.begin(client, "http://" + url);
-                http.setTimeout(TIMEOUT/1000);
-                const int httpCode = http.GET();
-                if (httpCode > 0) {
-                    if (http.getString().length() > 0)
-                        scrollText(http.getString().c_str(), true);
-                    else
-                        wait("Response empty", true);
+                if (WiFi.isConnected()) {
+                    WiFiClient client;
+                    HTTPClient http;
+                    const String url = prompt("URL: ");
+                    info("Getting request");
+                    http.begin(client, "http://www." + url);
+                    http.setTimeout(TIMEOUT);
+                    const int httpCode = http.GET();
+
+                    if (httpCode > 0) {
+                        String response = http.getString();
+                        if (response.length() > 0)
+                            scrollText(response.c_str(), true);
+                        else wait(http.errorToString(httpCode), true);
+                    } else wait(http.errorToString(httpCode), true);
+                    http.end();
                 } else {
-                    wait("Error", true);
+                    wait("Not connected", true);
                 }
-                http.end();
             } else if (text == "music") {
                 music();
             } else if (text == "irNec") {
                 String codeIn = prompt("Code: ");
-                unsigned long code = strtoul(codeIn.c_str(), NULL, 16);
+                unsigned long code = strtoul(codeIn.c_str(), nullptr, 16);
                 IrSender.sendNECMSB(code, 32);
                 wait("Sent", true);
             } else if (text == "irSam") {
                 String codeIn = prompt("Code: ");
-                unsigned long code = strtoul(codeIn.c_str(), NULL, 16);
+                unsigned long code = strtoul(codeIn.c_str(), nullptr, 16);
                 IrSender.sendSamsungMSB(code, 32);
                 wait("Sent", true);
             } else if (text == "tvOff") {
@@ -213,6 +217,9 @@ void loop() {
                 wait("Sent", true);
             } else if (text == "rem") {
                 irSam();
+            } else if (text == "linear") {
+                delay(250);
+                graph();
             } else if (text == "test") {
                 scrollText("Test:", true);
             } else if (text == "help") {
@@ -223,8 +230,9 @@ void loop() {
                     "music - play frequencies",
                     "irNec - send IR",
                     "irSam - send IR (samsung TV)",
-                    "tvoff - turn off samsung TV",
+                    "tvOff - turn off samsung TV",
                     "rem - remote for samsung TV",
+                    "linear - plot linear function",
                 };
                 scrollTextArr(options, false);
             } else {
@@ -245,6 +253,7 @@ void loop() {
         while (!M5Cardputer.Keyboard.isChange()) M5Cardputer.update();
         M5Cardputer.Lcd.wakeup();
         timer = 0;
+        delay(200);
     }
     timer++;
     delay(1);

@@ -13,6 +13,10 @@
 #define SEC_FONT_SIZE 1
 #define TIMEOUT 5000
 
+#define POINT1_X -240
+#define POINT2_X 240
+#define STEP 10
+
 #define IR_PIN 44
 
 #endif

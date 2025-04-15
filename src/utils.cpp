@@ -53,7 +53,8 @@ void info(const String msg) {
 void scrollText(const String msg, bool scrollX) {
     int posx = 1, posy = 1;
     M5Cardputer.Lcd.fillScreen(TFT_BLACK);
-    M5Cardputer.Lcd.drawString(msg, 10, 10);
+    M5Cardputer.Lcd.setCursor(0, 10*posy);
+    M5Cardputer.Lcd.println(msg);
     while (true) {
         M5Cardputer.update();
         if (M5Cardputer.Keyboard.isPressed()) {
@@ -61,16 +62,10 @@ void scrollText(const String msg, bool scrollX) {
             if (status.word.size() > 0) {
                 switch (status.word[0]) {
                     case ';':
-                        if (posy > 0) posy--;
+                        posy--;
                     break;
                     case '.':
-                        posy++;
-                    break;
-                    case ',':
-                        if (scrollX) posx++;
-                    break;
-                    case '/':
-                        if (scrollX && posx>0) posx--;
+                        if (posy<1)posy++;
                     break;
                 }
             }
@@ -78,7 +73,8 @@ void scrollText(const String msg, bool scrollX) {
                 break;
             }
             M5Cardputer.Lcd.fillScreen(TFT_BLACK);
-            M5Cardputer.Lcd.drawString(msg, 10 * posx, 10 * posy + 20);
+            M5Cardputer.Lcd.setCursor(0, 10*posy);
+            M5Cardputer.Lcd.println(msg);
             delay(200);
         }
     }
