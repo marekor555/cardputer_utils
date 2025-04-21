@@ -50,8 +50,8 @@ void info(const String msg) {
 }
 
 //TODO: remove this
-void scrollText(const String msg, bool scrollX) {
-    int posx = 1, posy = 1;
+void scrollText(const String msg) {
+    int posy = 1;
     M5Cardputer.Lcd.fillScreen(TFT_BLACK);
     M5Cardputer.Lcd.setCursor(0, 10*posy);
     M5Cardputer.Lcd.println(msg);

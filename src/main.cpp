@@ -5,67 +5,12 @@
 #include <IRremote.h>
 #include "utils.h"
 #include "config.h"
+#include "apps.h"
 
 
 String text = "";
-std::vector<float> tones;
-int speed = 1;
 int timer = 0;
 
-
-
-/**
- * play music
- */
-void music() {
-    String text = "";
-    while (true) {
-        M5Cardputer.update();
-        if (M5Cardputer.Keyboard.isPressed()) {
-            const Keyboard_Class::KeysState status = M5Cardputer.Keyboard.keysState();
-            for (const auto i: status.word) {
-                text += i;
-            }
-            if (status.enter) {
-                if (text == "play") {
-                    for (const auto i: tones) {
-                        M5Cardputer.Speaker.tone(i, 100 * speed);
-                        delay(100 * speed);
-                    }
-                }
-                if (text == "exit") {
-                    return;
-                }
-                const float tone = text.toFloat();
-                if (tone != 0) {
-                    tones.push_back(tone);
-                    text = "";
-                    M5Cardputer.Speaker.tone(tone, 100);
-                }
-            }
-            if (status.del) {
-                text.remove(text.length() - 1);
-            }
-            if (status.tab) {
-                if (!tones.empty()) {
-                    tones.pop_back();
-                }
-            }
-            M5Cardputer.Lcd.fillScreen(TFT_BLACK);
-            M5Cardputer.Lcd.drawString(PROMPT + text, 10, 10);
-            int yMove = 0;
-            for (const auto i: std::vector<float>(tones.rbegin(), tones.rend())) {
-                M5Cardputer.Lcd.drawString(String(i), 10, 30 + yMove);
-                yMove += 10 * SEC_FONT_SIZE;
-            }
-            delay(200);
-        }
-    }
-}
-
-/**
- * samsung IR remote
- */
 void irSam() {
     Serial.println("Initializing ir");
     String options[] = {
@@ -193,7 +138,7 @@ void loop() {
                     if (httpCode > 0) {
                         String response = http.getString();
                         if (response.length() > 0)
-                            scrollText(response.c_str(), true);
+                            scrollText(response.c_str());
                         else wait(http.errorToString(httpCode), true);
                     } else wait(http.errorToString(httpCode), true);
                     http.end();
@@ -221,7 +166,7 @@ void loop() {
                 delay(250);
                 graph();
             } else if (text == "test") {
-                scrollText("Test:", true);
+                scrollText("Test:");
             } else if (text == "help") {
                 std::vector<String> options = {
                     "scan - scan network",

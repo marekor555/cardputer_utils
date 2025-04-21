@@ -2,6 +2,7 @@
 #include <M5Cardputer.h>
 #include "utils.h"
 #include "config.h"
+#include "apps.h"
 
 void graph() {
   	M5Cardputer.Lcd.fillScreen(TFT_BLACK);

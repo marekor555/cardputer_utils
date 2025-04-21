@@ -24,9 +24,8 @@ void info(String msg);
 /**
  * scroll singular text
  * @param msg message to scroll
- * @param scrollX can scroll sideways
  */
-void scrollText(String msg, bool scrollX);
+void scrollText(String msg);
 
 /**
  * scroll through array of texts
@@ -34,7 +33,5 @@ void scrollText(String msg, bool scrollX);
  * @param scrollX can scroll sideways
  */
 void scrollTextArr(std::vector<String> msg, bool scrollX);
-
-void graph();
 
 #endif
