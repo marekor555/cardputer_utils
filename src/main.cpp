@@ -164,7 +164,10 @@ void loop() {
                 irSam();
             } else if (text == "linear") {
                 delay(250);
-                graph();
+                linear();
+            } else if (text == "wave") {
+                delay(250);
+                wave();
             } else if (text == "test") {
                 scrollText("Test:");
             } else if (text == "help") {
@@ -178,6 +181,7 @@ void loop() {
                     "tvOff - turn off samsung TV",
                     "rem - remote for samsung TV",
                     "linear - plot linear function",
+                    "wave - plot wave(sine) function",
                 };
                 scrollTextArr(options, false);
             } else {

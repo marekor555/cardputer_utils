@@ -33,6 +33,10 @@
 // Controls the visual spacing between grid lines and coordinate scaling
 #define STEP 10
 
+// Grid size and scaling factor for sine plotting
+// Controls the visual spacing between grid lines and coordinate scaling
+#define STEP_SIN 20
+
 // Pin for the Infrared (IR) transmitter
 // Used for remote control functionality
 #define IR_PIN 44

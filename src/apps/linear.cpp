@@ -4,7 +4,7 @@
 #include "config.h"
 #include "apps.h"
 
-void graph() {
+void linear() {
   	M5Cardputer.Lcd.fillScreen(TFT_BLACK);
 	const String a_string = prompt("Enter A:");
 	const String b_string = prompt("Enter B:");

@@ -3,7 +3,12 @@
 /**
  * Function to plot a linear graph on the display.
  */
-void graph();
+void linear();
+
+/**
+ * Function to plot a sine wave on the display.
+ */
+void wave();
 
 /**
  * Function to control music playback and input handling.
