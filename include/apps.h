@@ -11,6 +11,11 @@ void linear();
 void wave();
 
 /**
+ * Function to plot a quadratic formula on the display.
+ */
+void quadratic();
+
+/**
  * Function to control music playback and input handling.
  */
 void music();

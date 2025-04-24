@@ -95,7 +95,7 @@ void loop() {
         }
         if (status.enter) {
             M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
-            M5Cardputer.Lcd.setTextColor(TFT_CYAN);
+            M5Cardputer.Lcd.setTextColor(TFT_GREEN);
             if (text == "scan") {
                 info("Scanning network");
                 const int n = WiFi.scanNetworks();
@@ -168,6 +168,9 @@ void loop() {
             } else if (text == "wave") {
                 delay(250);
                 wave();
+            } else if (text == "quadratic") {
+                delay(250);
+                quadratic();
             } else if (text == "test") {
                 scrollText("Test:");
             } else if (text == "help") {
