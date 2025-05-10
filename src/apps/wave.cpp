@@ -40,6 +40,7 @@ void drawWave(const float freq, const float amp) {
 	for (int i = 1; i < 240; i++) {
 		const int x = i;
 		const int y = y_cent + positions[i];
+
 		M5Cardputer.Lcd.drawLine(last_x, last_y, x, y, TFT_CYAN);
 		last_x = x;
 		last_y = y;
@@ -50,21 +51,21 @@ void drawWave(const float freq, const float amp) {
 
 void wave() {
 	M5Cardputer.Lcd.fillScreen(TFT_BLACK);
-	float freq = 1;
-	float amp = 1;
+	const String amp_string = prompt("Enter amplitude:");
+	const String freq_string = prompt("Enter frequency:");
+	float freq = amp_string.toFloat();
+	float amp = freq_string.toFloat();
 
 	drawWave(freq/STEP_SIN, amp*STEP_SIN);
-
-	// M5Cardputer.Lcd.drawLine(POINT1_X+, point1_y, POINT2_X, point2_y, TFT_RED);
 	bool update = false;
-	while (!M5Cardputer.BtnA.wasClicked()) {
+	while (true) {
 		M5Cardputer.update();
 		if (M5Cardputer.Keyboard.isPressed()) {
 			const Keyboard_Class::KeysState status = M5Cardputer.Keyboard.keysState();
 			if (status.opt) {
 				break;
 			}
-			if (status.word.size() > 0) {
+			if (!status.word.empty()) {
 				switch (status.word[0]) {
 					case ';':
 						amp += 0.1;

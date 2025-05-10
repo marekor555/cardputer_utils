@@ -8,7 +8,7 @@
 #include "apps.h"
 
 
-String text = "";
+String text = "", lastCmd = "";
 int timer = 0;
 
 void irSam() {
@@ -93,7 +93,11 @@ void loop() {
         if (status.del) {
             text.remove(text.length() - 1);
         }
+        if (status.fn) {
+            text = lastCmd;
+        }
         if (status.enter) {
+            lastCmd = text;
             M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
             M5Cardputer.Lcd.setTextColor(TFT_GREEN);
             if (text == "scan") {
@@ -173,6 +177,8 @@ void loop() {
                 quadratic();
             } else if (text == "test") {
                 scrollText("Test:");
+            } else if (text == "battery") {
+                wait("Level: " + String(M5Cardputer.Power.getBatteryLevel()), true);
             } else if (text == "help") {
                 std::vector<String> options = {
                     "scan - scan network",
@@ -185,9 +191,12 @@ void loop() {
                     "rem - remote for samsung TV",
                     "linear - plot linear function",
                     "wave - plot wave(sine) function",
+                    "quadratic - plot quadratic function",
+                    "battery - check battery percentage(not accurate)"
                 };
                 scrollTextArr(options, false);
             } else {
+                Serial.println("Command not recognized");
                 wait("Command not recognized", true);
             }
 

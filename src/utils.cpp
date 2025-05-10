@@ -33,10 +33,10 @@ void wait(const String msg, const bool clearScreen) {
         M5Cardputer.Lcd.fillScreen(TFT_BLACK);
         M5Cardputer.Lcd.drawString(msg, 10, 10);
     }
-    while (!M5Cardputer.BtnA.wasClicked()) {
+    while (true) {
         M5Cardputer.update();
         if (M5Cardputer.Keyboard.isPressed()) {
-            const Keyboard_Class::KeysState status = M5Cardputer.Keyboard.keysState();
+            const auto status = M5Cardputer.Keyboard.keysState();
             if (status.opt) {
                 break;
             }
@@ -62,10 +62,10 @@ void scrollText(const String msg) {
             if (status.word.size() > 0) {
                 switch (status.word[0]) {
                     case ';':
-                        posy--;
+                        if (posy<1)posy++;
                     break;
                     case '.':
-                        if (posy<1)posy++;
+                        posy--;
                     break;
                 }
             }
@@ -81,7 +81,7 @@ void scrollText(const String msg) {
 }
 
 void scrollTextArr(const std::vector<String> msg, bool scrollX) {
-    int posx = 1, posy = 1;
+    int posx = 1, posy = 0;
     M5Cardputer.Lcd.fillScreen(TFT_BLACK);
     for (int i = 0; i<msg.size(); i++) {
         M5Cardputer.Lcd.drawString(msg[i], 10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1));
@@ -93,10 +93,10 @@ void scrollTextArr(const std::vector<String> msg, bool scrollX) {
             if (status.word.size() > 0) {
                 switch (status.word[0]) {
                     case ';':
-                        posy--;
+                        if (posy<1)posy++;
                     break;
                     case '.':
-                        if (posy<1)posy++;
+                        posy--;
                     break;
                     case ',':
                         if (scrollX) posx++;

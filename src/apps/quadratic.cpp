@@ -54,22 +54,25 @@ void drawQuadratic(const float a, const float b, const float c) {
 
 void quadratic() {
 	M5Cardputer.Lcd.fillScreen(TFT_BLACK);
-	float a = 1;
-	float b = 0;
-	float c = 0;
+	const String a_string = prompt("Enter A:");
+	const String b_string = prompt("Enter B:");
+	const String c_string = prompt("Enter C:");
+	float a = a_string.toFloat();
+	float b = b_string.toFloat();
+	float c = c_string.toFloat();
 
 	drawQuadratic(a,b,c);
 
 	// M5Cardputer.Lcd.drawLine(POINT1_X+, point1_y, POINT2_X, point2_y, TFT_RED);
 	bool update = false;
-	while (!M5Cardputer.BtnA.wasClicked()) {
+	while (true) {
 		M5Cardputer.update();
 		if (M5Cardputer.Keyboard.isPressed()) {
 			const Keyboard_Class::KeysState status = M5Cardputer.Keyboard.keysState();
 			if (status.opt) {
 				break;
 			}
-			if (status.word.size() > 0) {
+			if (!status.word.empty()) {
 				switch (status.word[0]) {
 					case ';':
 						c -= 0.25;
