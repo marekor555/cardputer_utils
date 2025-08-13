@@ -25,6 +25,11 @@ void music();
  */
 void irSam();
 
+/**
+ * Function to handle file exploring and viewing.
+ */
+void fileExplorer();
+
 #define APPS_H
 
 #endif //APPS_H

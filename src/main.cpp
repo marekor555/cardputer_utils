@@ -133,7 +133,7 @@ void loop() {
                 if (WiFi.isConnected()) {
                     WiFiClient client;
                     HTTPClient http;
-                    const String url = prompt("URL: ");
+                    const String url = prompt("URL: http://www.");
                     info("Getting request");
                     http.begin(client, "http://www." + url);
                     http.setTimeout(TIMEOUT);
@@ -141,8 +141,14 @@ void loop() {
 
                     if (httpCode > 0) {
                         String response = http.getString();
-                        if (response.length() > 0)
-                            scrollText(response.c_str());
+                        if (response.length() > 0) {
+                            String parsedResponse = "";
+                            for (int i = 0; i < response.length(); i++) {
+                                if (i % 38 == 0) parsedResponse += "\n";
+                                parsedResponse += response[i];
+                            }
+                            scrollText(parsedResponse.c_str(), true);
+                        }
                         else wait(http.errorToString(httpCode), true);
                     } else wait(http.errorToString(httpCode), true);
                     http.end();
@@ -175,26 +181,27 @@ void loop() {
             } else if (text == "quadratic") {
                 delay(250);
                 quadratic();
-            } else if (text == "test") {
-                scrollText("Test:");
             } else if (text == "battery") {
                 wait("Level: " + String(M5Cardputer.Power.getBatteryLevel()), true);
+            } else if (text == "files") {
+                fileExplorer();
             } else if (text == "help") {
                 std::vector<String> options = {
-                    "scan - scan network",
-                    "conn - connect to network",
-                    "req - get request",
-                    "music - play frequencies",
-                    "irNec - send IR",
-                    "irSam - send IR (samsung TV)",
-                    "tvOff - turn off samsung TV",
-                    "rem - remote for samsung TV",
-                    "linear - plot linear function",
-                    "wave - plot wave(sine) function",
+                    "scan      - scan network",
+                    "conn      - connect to network",
+                    "req       - get request",
+                    "music     - play frequencies",
+                    "irNec     - send IR",
+                    "irSam     - send IR (samsung TV)",
+                    "tvOff     - turn off samsung TV",
+                    "rem       - remote for samsung TV",
+                    "linear    - plot linear function",
+                    "wave      - plot wave(sine) function",
                     "quadratic - plot quadratic function",
-                    "battery - check battery percentage(not accurate)"
+                    "battery   - check battery percentage",
+                    "files     - browse files on sd card",
                 };
-                scrollTextArr(options, false);
+                scrollTextArr(options, true);
             } else {
                 Serial.println("Command not recognized");
                 wait("Command not recognized", true);

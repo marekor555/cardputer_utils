@@ -11,7 +11,7 @@ String prompt(String msg);
 /**
  * wait until user action
  * @param msg wait message
- * @param clearScreen screen can be left uncleared
+ * @param clearScreen the screen can be left uncleared
  */
 void wait(String msg, bool clearScreen);
 
@@ -24,8 +24,9 @@ void info(String msg);
 /**
  * scroll singular text
  * @param msg message to scroll
+ * @param scrollX can scroll sideways
  */
-void scrollText(String msg);
+void scrollText(String msg, bool scrollX);
 
 /**
  * scroll through array of texts
@@ -33,5 +34,13 @@ void scrollText(String msg);
  * @param scrollX can scroll sideways
  */
 void scrollTextArr(std::vector<String> msg, bool scrollX);
+
+/**
+ * scroll throuh array of text and return selected
+ * @param msg message to scroll
+ * @param scrollX can scroll sideways
+ * @return highlighted text on exit
+ */
+String scrollTextArrHighlight(std::vector<String> msg, bool scrollX);
 
 #endif

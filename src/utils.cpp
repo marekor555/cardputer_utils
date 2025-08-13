@@ -50,8 +50,8 @@ void info(const String msg) {
 }
 
 //TODO: remove this
-void scrollText(const String msg) {
-    int posy = 1;
+void scrollText(const String msg, bool scrollX) {
+    int posx = 1, posy = 0;
     M5Cardputer.Lcd.fillScreen(TFT_BLACK);
     M5Cardputer.Lcd.setCursor(0, 10*posy);
     M5Cardputer.Lcd.println(msg);
@@ -62,11 +62,17 @@ void scrollText(const String msg) {
             if (status.word.size() > 0) {
                 switch (status.word[0]) {
                     case ';':
-                        if (posy<1)posy++;
-                    break;
+                        if (posy<=-1)posy++;
+                        break;
                     case '.':
                         posy--;
-                    break;
+                        break;
+                    case '/':
+                        if (scrollX) posx--;
+                        break;
+                    case ',':
+                        if (scrollX && posx < 1) posx++;
+                        break;
                 }
             }
             if (status.opt) {
@@ -93,16 +99,16 @@ void scrollTextArr(const std::vector<String> msg, bool scrollX) {
             if (status.word.size() > 0) {
                 switch (status.word[0]) {
                     case ';':
-                        if (posy<1)posy++;
+                        if (posy<=-1)posy++;
                     break;
                     case '.':
                         posy--;
                     break;
-                    case ',':
-                        if (scrollX) posx++;
-                    break;
                     case '/':
-                        if (scrollX && posx<1) posx--;
+                        if (scrollX) posx--;
+                    break;
+                    case ',':
+                        if (scrollX && posx < 1) posx++;
                     break;
                 }
             }
@@ -116,4 +122,54 @@ void scrollTextArr(const std::vector<String> msg, bool scrollX) {
             delay(200);
         }
     }
+}
+
+String scrollTextArrHighlight(const std::vector<String> msg, bool scrollX) {
+    int posx = 1, posy = 0;
+    int highlight = 0;
+    M5Cardputer.Lcd.fillScreen(TFT_BLACK);
+    for (int i = 0; i<msg.size(); i++) {
+        if (i == highlight) {
+            M5Cardputer.Lcd.fillRect(10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1), 10*msg[i].length(), 10 * SEC_FONT_SIZE, TFT_DARKGRAY);
+        }
+        M5Cardputer.Lcd.drawString(msg[i], 10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1));
+    }
+    while (true) {
+        M5Cardputer.update();
+        if (M5Cardputer.Keyboard.isPressed()) {
+            const Keyboard_Class::KeysState status = M5Cardputer.Keyboard.keysState();
+            if (status.word.size() > 0) {
+                switch (status.word[0]) {
+                    case ';':
+                        if (posy<=-1) {
+                            posy++;
+                            highlight--;
+                        }
+                        break;
+                    case '.':
+                        posy--;
+                        highlight++;
+                        break;
+                    case '/':
+                        if (scrollX) posx--;
+                        break;
+                    case ',':
+                        if (scrollX && posx < 1) posx++;
+                        break;
+                }
+            }
+            if (status.opt || status.enter) {
+                break;
+            }
+            M5Cardputer.Lcd.fillScreen(TFT_BLACK);
+            for (int i = 0; i<msg.size(); i++) {
+                if (i == highlight) {
+                    M5Cardputer.Lcd.fillRect(10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1), 10*msg[i].length(), 10 * SEC_FONT_SIZE, TFT_DARKGRAY);
+                }
+                M5Cardputer.Lcd.drawString(msg[i], 10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1));
+            }
+            delay(200);
+        }
+    }
+    return msg[highlight];
 }
