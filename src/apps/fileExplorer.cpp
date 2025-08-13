@@ -22,26 +22,33 @@ void fileExplorer() {
 		File file = root.openNextFile();
 
 		files.clear();
-		files.push_back("|exit|");
-		files.push_back("|..|");
+		if (viewPath == "/") files.push_back("||-exit-||");
+		if (viewPath != "/") files.push_back("|..|");
 		while (file) {
 			if (file.isDirectory()) {
-				files.push_back("|"+String(file.name()));
-			} else {
-				files.push_back(file.name());
+				files.push_back("|"+String(file.name())+"|");
 			}
 			file = root.openNextFile();
 		}
 
-		filename = scrollTextArrHighlight(files, true);
-		if (filename == "|exit|") {
+		root = SD.open(viewPath);
+		file = root.openNextFile();
+		while (file) {
+			if (!file.isDirectory()) {
+				files.push_back(String(file.name()));
+			}
+			file = root.openNextFile();
+		}
+
+		filename = scrollTextArrHighlight(files, true, TFT_WHITE, TFT_BLUE);
+		if (filename == "||-exit-||") {
 			SD.end();
 			return;
 		} if (filename == "|..|") {
 			viewPath = viewPath.substring(0, viewPath.lastIndexOf("/"));
 		} else {
-			if (filename.startsWith("|")) {
-				filename = filename.substring(1);
+			if (filename.startsWith("|") && filename.endsWith("|")) {
+				filename = filename.substring(1, filename.length()-1);
 			}
 			File selectedFile = SD.open(viewPath + "/" + filename);
 			if (!selectedFile.isDirectory()) {
@@ -52,6 +59,6 @@ void fileExplorer() {
 				viewPath += "/" + filename;
 			}
 		}
-		delay(300);
+		delay(100);
 	}
 }

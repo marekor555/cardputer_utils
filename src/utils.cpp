@@ -124,7 +124,8 @@ void scrollTextArr(const std::vector<String> msg, bool scrollX) {
     }
 }
 
-String scrollTextArrHighlight(const std::vector<String> msg, bool scrollX) {
+String scrollTextArrHighlight(const std::vector<String> msg, bool scrollX, int mainColor, int extraColor) {
+    M5Cardputer.Lcd.setTextColor(mainColor);
     int posx = 1, posy = 0;
     int highlight = 0;
     M5Cardputer.Lcd.fillScreen(TFT_BLACK);
@@ -132,7 +133,13 @@ String scrollTextArrHighlight(const std::vector<String> msg, bool scrollX) {
         if (i == highlight) {
             M5Cardputer.Lcd.fillRect(10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1), 10*msg[i].length(), 10 * SEC_FONT_SIZE, TFT_DARKGRAY);
         }
-        M5Cardputer.Lcd.drawString(msg[i], 10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1));
+        if (msg[i].startsWith("|") && msg[i].endsWith("|")) {
+            M5Cardputer.Lcd.setTextColor(extraColor);
+            M5Cardputer.Lcd.drawString(msg[i].substring(1, msg[i].length()-1), 10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1));
+            M5Cardputer.Lcd.setTextColor(mainColor);
+        } else {
+            M5Cardputer.Lcd.drawString(msg[i], 10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1));
+        }
     }
     while (true) {
         M5Cardputer.update();
@@ -166,7 +173,13 @@ String scrollTextArrHighlight(const std::vector<String> msg, bool scrollX) {
                 if (i == highlight) {
                     M5Cardputer.Lcd.fillRect(10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1), 10*msg[i].length(), 10 * SEC_FONT_SIZE, TFT_DARKGRAY);
                 }
-                M5Cardputer.Lcd.drawString(msg[i], 10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1));
+                if (msg[i].startsWith("|") && msg[i].endsWith("|")) {
+                    M5Cardputer.Lcd.setTextColor(extraColor);
+                    M5Cardputer.Lcd.drawString(msg[i].substring(1, msg[i].length()-1), 10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1));
+                    M5Cardputer.Lcd.setTextColor(mainColor);
+                } else {
+                    M5Cardputer.Lcd.drawString(msg[i], 10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1));
+                }
             }
             delay(200);
         }

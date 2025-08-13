@@ -39,8 +39,10 @@ void scrollTextArr(std::vector<String> msg, bool scrollX);
  * scroll throuh array of text and return selected
  * @param msg message to scroll
  * @param scrollX can scroll sideways
+ * @param mainColor main(regular) color
+ * @param extraColor extra(highlight) color
  * @return highlighted text on exit
  */
-String scrollTextArrHighlight(std::vector<String> msg, bool scrollX);
+String scrollTextArrHighlight(std::vector<String> msg, bool scrollX, int mainColor, int extraColor);
 
 #endif

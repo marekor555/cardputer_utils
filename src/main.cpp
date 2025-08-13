@@ -70,6 +70,7 @@ void irSam() {
 }
 
 void setup() {
+    esp_sleep_enable_ext0_wakeup(GPIO_NUM_0, 0);
     IrSender.begin(IR_PIN);
     WiFi.mode(WIFI_STA);
     Serial.begin(115200);
@@ -216,13 +217,8 @@ void loop() {
         delay(200);
         timer = 0;
     }
-    if (timer > 5000) {
-        M5Cardputer.Lcd.sleep();
-        while (!M5Cardputer.Keyboard.isChange()) M5Cardputer.update();
-        M5Cardputer.Lcd.wakeup();
-        timer = 0;
-        delay(200);
-    }
+    if (timer > 10000) esp_deep_sleep_start();
+
     timer++;
     delay(1);
 }
