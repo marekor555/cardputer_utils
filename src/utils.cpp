@@ -188,6 +188,12 @@ String scrollTextArrHighlight(const std::vector<String> msg, bool scrollX, int m
 }
 
 void debounceKeyboard() {
-    while (M5Cardputer.Keyboard.isPressed())
+    while (M5Cardputer.Keyboard.isPressed()) {
         M5Cardputer.update();
+        const auto status = M5Cardputer.Keyboard.keysState();
+        if (status.shift || status.del) {
+            delay(100);
+            break;
+        }
+    }
 }

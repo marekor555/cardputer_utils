@@ -8,8 +8,45 @@
 #include "apps.h"
 
 
+std::vector<String> commandList = {
+    "help",
+    "scan",
+    "req",
+    "music",
+    "irNec",
+    "irSam",
+    "tvOff",
+    "rem",
+    "linear",
+    "wave",
+    "quadratic",
+    "battery",
+    "files",
+};
+
 String text = "", lastCmd = "";
 int timer = 0;
+
+std::vector<String> getAvaiableCommands(String command, std::vector<String> cmdList) {
+    if (command.length() == 0 || command.isEmpty()) return cmdList;
+    std::vector<String> avaiableCommands;
+    for (const auto i : cmdList) {
+        if (i.startsWith(command)) avaiableCommands.push_back(i);
+    }
+
+    return avaiableCommands;
+}
+
+void drawCommands() {
+    M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
+    M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
+    std::vector<String> available = getAvaiableCommands(text, commandList);
+    for (int i = 0; i < available.size(); i++) {
+        M5Cardputer.Lcd.drawString(available[i], 10, 30+i*10);
+    }
+    M5Cardputer.Lcd.setTextSize(PRIM_FONT_SIZE);
+    M5Cardputer.Lcd.setTextColor(PRIM_FONT_COLOR);
+}
 
 void irSam() {
     Serial.println("Initializing ir");
@@ -82,6 +119,7 @@ void setup() {
     M5Cardputer.Lcd.setTextColor(PRIM_FONT_COLOR);
     M5Cardputer.Lcd.setTextSize(PRIM_FONT_SIZE);
     M5Cardputer.Lcd.drawString(PROMPT, 10, 10);
+    drawCommands();
 }
 
 void loop() {
@@ -213,6 +251,7 @@ void loop() {
         }
         M5Cardputer.Lcd.fillScreen(TFT_BLACK);
         M5Cardputer.Lcd.drawString(PROMPT + text, 10, 10);
+        drawCommands();
         debounceKeyboard();
         timer = 0;
     }
