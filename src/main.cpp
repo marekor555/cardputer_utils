@@ -25,7 +25,10 @@ std::vector<String> commandList = {
 };
 
 String text = "", lastCmd = "";
-int timer = 0;
+int timer = 0, selectedCmd = 0;
+
+std::vector<String> available = {};
+
 
 std::vector<String> getAvaiableCommands(String command, std::vector<String> cmdList) {
     if (command.length() == 0 || command.isEmpty()) return cmdList;
@@ -33,15 +36,18 @@ std::vector<String> getAvaiableCommands(String command, std::vector<String> cmdL
     for (const auto i : cmdList) {
         if (i.startsWith(command)) avaiableCommands.push_back(i);
     }
-
+    if (selectedCmd >= avaiableCommands.size())
+        selectedCmd = avaiableCommands.size() - 1;
     return avaiableCommands;
 }
 
 void drawCommands() {
     M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
     M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
-    std::vector<String> available = getAvaiableCommands(text, commandList);
     for (int i = 0; i < available.size(); i++) {
+        if (selectedCmd == i) {
+            M5Cardputer.Lcd.fillRect(10, 30+i*10, 100, 10, TFT_DARKGREY);
+        }
         M5Cardputer.Lcd.drawString(available[i], 10, 30+i*10);
     }
     M5Cardputer.Lcd.setTextSize(PRIM_FONT_SIZE);
@@ -119,6 +125,7 @@ void setup() {
     M5Cardputer.Lcd.setTextColor(PRIM_FONT_COLOR);
     M5Cardputer.Lcd.setTextSize(PRIM_FONT_SIZE);
     M5Cardputer.Lcd.drawString(PROMPT, 10, 10);
+    available = getAvaiableCommands(text, commandList);
     drawCommands();
 }
 
@@ -127,7 +134,16 @@ void loop() {
     if (M5Cardputer.Keyboard.isPressed()) {
         const Keyboard_Class::KeysState status = M5Cardputer.Keyboard.keysState();
         for (const auto i: status.word) {
-            text += i;
+            switch (i) {
+                case ';':
+                    if (selectedCmd > 0) selectedCmd--;
+                    break;
+                case '.':
+                    if (selectedCmd < commandList.size() - 1) selectedCmd++;
+                    break;
+                default:
+                    text += i;
+            }
         }
         if (status.del) {
             text.remove(text.length() - 1);
@@ -135,7 +151,11 @@ void loop() {
         if (status.fn) {
             text = lastCmd;
         }
+        if (status.tab) {
+            text = available[selectedCmd];
+        }
         if (status.enter) {
+            text = available[selectedCmd];
             lastCmd = text;
             M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
             M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
@@ -251,6 +271,7 @@ void loop() {
         }
         M5Cardputer.Lcd.fillScreen(TFT_BLACK);
         M5Cardputer.Lcd.drawString(PROMPT + text, 10, 10);
+        available = getAvaiableCommands(text, commandList);
         drawCommands();
         debounceKeyboard();
         timer = 0;
