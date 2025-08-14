@@ -14,7 +14,7 @@ String viewPath = "/";
 String filename = "";
 
 void fileExplorer() {
-	delay(300);
+	debounceKeyboard();
 	SPI.begin(40, 39, 14, 12);
 	while (!SD.begin(12, SPI)) {}
 	while (true) {
@@ -40,7 +40,7 @@ void fileExplorer() {
 			file = root.openNextFile();
 		}
 
-		filename = scrollTextArrHighlight(files, true, TFT_WHITE, TFT_BLUE);
+		filename = scrollTextArrHighlight(files, true, SEC_FONT_COLOR, TFT_BLUE);
 		if (filename == "||-exit-||") {
 			SD.end();
 			return;
@@ -59,6 +59,6 @@ void fileExplorer() {
 				viewPath += "/" + filename;
 			}
 		}
-		delay(100);
+		debounceKeyboard();
 	}
 }

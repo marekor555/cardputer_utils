@@ -45,4 +45,9 @@ void scrollTextArr(std::vector<String> msg, bool scrollX);
  */
 String scrollTextArrHighlight(std::vector<String> msg, bool scrollX, int mainColor, int extraColor);
 
+/**
+ * debounce keyboard
+ */
+void debounceKeyboard();
+
 #endif

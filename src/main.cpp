@@ -79,7 +79,7 @@ void setup() {
 
     M5Cardputer.Lcd.setRotation(1);
     M5Cardputer.Lcd.fillScreen(TFT_BLACK);
-    M5Cardputer.Lcd.setTextColor(TFT_GOLD);
+    M5Cardputer.Lcd.setTextColor(PRIM_FONT_COLOR);
     M5Cardputer.Lcd.setTextSize(PRIM_FONT_SIZE);
     M5Cardputer.Lcd.drawString(PROMPT, 10, 10);
 }
@@ -100,35 +100,35 @@ void loop() {
         if (status.enter) {
             lastCmd = text;
             M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
-            M5Cardputer.Lcd.setTextColor(TFT_GREEN);
+            M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
             if (text == "scan") {
                 info("Scanning network");
                 const int n = WiFi.scanNetworks();
                 M5Cardputer.Lcd.fillScreen(TFT_BLACK);
                 std::vector<String> networks;
+                networks.push_back("|back|");
                 for (int i = 0; i < n; i++) {
                     networks.push_back(WiFi.SSID(i).c_str());
                 }
-                scrollTextArr(networks, false);
-            } else if (text == "conn") {
-                delay(500);
-                if (!WiFi.isConnected()) {
-                    const String ssid = prompt("SSID: ");
+                String selectedNetwork = scrollTextArrHighlight(networks, false, SEC_FONT_COLOR, PRIM_FONT_COLOR);
+                if (selectedNetwork != "|back|") {
+                    const String ssid = selectedNetwork;
+                    debounceKeyboard();
                     const String passwd = prompt("Password: ");
                     WiFi.begin(ssid, passwd);
                     M5Cardputer.Lcd.fillScreen(TFT_BLACK);
                     M5Cardputer.Lcd.drawString("Connecting", 10, 15);
                     unsigned long startAttemptTime = millis();
                     while (WiFi.status() != WL_CONNECTED) {
+                        if (M5Cardputer.Keyboard.isPressed()) {
+                            const auto status = M5Cardputer.Keyboard.keysState();
+                            if (status.opt) break;
+                        }
                         if (millis() - startAttemptTime >= TIMEOUT) {
                             wait("TIMEOUT!", true);
                             break;
                         }
-                        delay(200);
                     }
-                    wait("Connected successfully", true);
-                } else {
-                    wait("Already connected", true);
                 }
             } else if (text == "req") {
                 if (WiFi.isConnected()) {
@@ -188,8 +188,7 @@ void loop() {
                 fileExplorer();
             } else if (text == "help") {
                 std::vector<String> options = {
-                    "scan      - scan network",
-                    "conn      - connect to network",
+                    "scan      - scan and connect network",
                     "req       - get request",
                     "music     - play frequencies",
                     "irNec     - send IR",
@@ -209,12 +208,12 @@ void loop() {
             }
 
             M5Cardputer.Lcd.setTextSize(PRIM_FONT_SIZE);
-            M5Cardputer.Lcd.setTextColor(TFT_GOLD);
+            M5Cardputer.Lcd.setTextColor(PRIM_FONT_COLOR);
             text = "";
         }
         M5Cardputer.Lcd.fillScreen(TFT_BLACK);
         M5Cardputer.Lcd.drawString(PROMPT + text, 10, 10);
-        delay(200);
+        debounceKeyboard();
         timer = 0;
     }
     if (timer > 10000) esp_deep_sleep_start();

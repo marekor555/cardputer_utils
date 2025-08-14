@@ -22,7 +22,7 @@ String prompt(const String msg) {
             }
             M5Cardputer.Lcd.fillScreen(TFT_BLACK);
             M5Cardputer.Lcd.drawString(msg + output, 10, 10);
-            delay(200);
+            debounceKeyboard();
         }
     }
     return output;
@@ -49,7 +49,7 @@ void info(const String msg) {
     M5Cardputer.Lcd.drawString(msg, 10, 10);
 }
 
-//TODO: remove this
+
 void scrollText(const String msg, bool scrollX) {
     int posx = 1, posy = 0;
     M5Cardputer.Lcd.fillScreen(TFT_BLACK);
@@ -81,7 +81,7 @@ void scrollText(const String msg, bool scrollX) {
             M5Cardputer.Lcd.fillScreen(TFT_BLACK);
             M5Cardputer.Lcd.setCursor(0, 10*posy);
             M5Cardputer.Lcd.println(msg);
-            delay(200);
+            debounceKeyboard();
         }
     }
 }
@@ -119,7 +119,7 @@ void scrollTextArr(const std::vector<String> msg, bool scrollX) {
             for (int i = 0; i<msg.size(); i++) {
                 M5Cardputer.Lcd.drawString(msg[i], 10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1));
             }
-            delay(200);
+            debounceKeyboard();
         }
     }
 }
@@ -181,8 +181,13 @@ String scrollTextArrHighlight(const std::vector<String> msg, bool scrollX, int m
                     M5Cardputer.Lcd.drawString(msg[i], 10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1));
                 }
             }
-            delay(200);
+            debounceKeyboard();
         }
     }
     return msg[highlight];
+}
+
+void debounceKeyboard() {
+    while (M5Cardputer.Keyboard.isPressed())
+        M5Cardputer.update();
 }

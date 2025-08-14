@@ -30,7 +30,6 @@ Enter these keywords via the Cardputer’s keyboard:
 |  Command  |           Description           |
 |:---------:|:-------------------------------:|
 |  `scan`   |    Scan nearby WiFi networks    |
-|  `conn`   |    Connect to a WiFi network    |
 |   `req`   |   Send a GET request to a URL   |
 |  `music`  |   Input and play frequencies    |
 |  `irNec`  |      Send raw NEC IR code       |

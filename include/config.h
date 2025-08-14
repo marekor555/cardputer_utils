@@ -3,6 +3,8 @@
  * By MAREKOR555
  * Config file for cardputer_utils
  */
+#pragma once
+#include <M5Cardputer.h>
 
 #ifndef CONFIG_H
 #define CONFIG_H
@@ -16,11 +18,17 @@
 // Primary font size used for main text and UI elements
 #define PRIM_FONT_SIZE 2
 
+// Primary font color used for main text and UI elements
+#define PRIM_FONT_COLOR TFT_GOLD
+
 // Secondary font size used for additional information and smaller UI elements
 #define SEC_FONT_SIZE 1
 
+// Secondary font color used for additional information and smaller UI elements
+#define SEC_FONT_COLOR TFT_WHITE
+
 // Global timeout in milliseconds for network operations and connections
-#define TIMEOUT 5000
+#define TIMEOUT 10000
 
 // Graph plotting configuration
 // Left-edge X-coordinate for graph plotting (virtual coordinate space)
