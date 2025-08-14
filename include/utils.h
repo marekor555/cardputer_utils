@@ -2,7 +2,7 @@
 #define UTILS_H
 
 /**
- * prompt user to input text
+ * prompt the user to input text
  * @param msg prompt message
  * @return
  */
@@ -29,14 +29,14 @@ void info(String msg);
 void scrollText(String msg, bool scrollX);
 
 /**
- * scroll through array of texts
+ * scroll through an array of texts
  * @param msg message to scroll
  * @param scrollX can scroll sideways
  */
 void scrollTextArr(std::vector<String> msg, bool scrollX);
 
 /**
- * scroll throuh array of text and return selected
+ * scroll through array of a text and return selected
  * @param msg message to scroll
  * @param scrollX can scroll sideways
  * @param mainColor main(regular) color
@@ -44,6 +44,12 @@ void scrollTextArr(std::vector<String> msg, bool scrollX);
  * @return highlighted text on exit
  */
 String scrollTextArrHighlight(std::vector<String> msg, bool scrollX, int mainColor, int extraColor);
+
+/**
+ * Ask a yes / no question
+ * @param msg question
+ */
+bool yesNoPopup(String msg);
 
 /**
  * debounce keyboard

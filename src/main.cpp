@@ -42,13 +42,17 @@ std::vector<String> getAvaiableCommands(String command, std::vector<String> cmdL
 }
 
 void drawCommands() {
+    int shift = 0;
+    if (selectedCmd > 8) {
+        shift = (selectedCmd - 8) * -10;
+    }
     M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
     M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
     for (int i = 0; i < available.size(); i++) {
         if (selectedCmd == i) {
-            M5Cardputer.Lcd.fillRect(10, 30+i*10, 100, 10, TFT_DARKGREY);
+            M5Cardputer.Lcd.fillRect(10, 30+i*10+shift, 100, 10, TFT_DARKGREY);
         }
-        M5Cardputer.Lcd.drawString(available[i], 10, 30+i*10);
+        M5Cardputer.Lcd.drawString(available[i], 10, 30+i*10+shift);
     }
     M5Cardputer.Lcd.setTextSize(PRIM_FONT_SIZE);
     M5Cardputer.Lcd.setTextColor(PRIM_FONT_COLOR);
@@ -107,7 +111,7 @@ void irSam() {
                 Serial.println("Exiting ir");
                 break;
             }
-            delay(200);
+            debounceKeyboard();
         }
     }
 }
@@ -121,12 +125,14 @@ void setup() {
     M5Cardputer.begin(cfg, true);
 
     M5Cardputer.Lcd.setRotation(1);
-    M5Cardputer.Lcd.fillScreen(TFT_BLACK);
     M5Cardputer.Lcd.setTextColor(PRIM_FONT_COLOR);
     M5Cardputer.Lcd.setTextSize(PRIM_FONT_SIZE);
-    M5Cardputer.Lcd.drawString(PROMPT, 10, 10);
+
+    M5Cardputer.Lcd.fillScreen(TFT_BLACK);
     available = getAvaiableCommands(text, commandList);
     drawCommands();
+    M5Cardputer.Lcd.fillRect(0, 0, 128, 25, TFT_BLACK);
+    M5Cardputer.Lcd.drawString(PROMPT, 10, 10);
 }
 
 void loop() {
@@ -270,9 +276,10 @@ void loop() {
             text = "";
         }
         M5Cardputer.Lcd.fillScreen(TFT_BLACK);
-        M5Cardputer.Lcd.drawString(PROMPT + text, 10, 10);
         available = getAvaiableCommands(text, commandList);
         drawCommands();
+        M5Cardputer.Lcd.fillRect(0, 0, 128, 25, TFT_BLACK);
+        M5Cardputer.Lcd.drawString(PROMPT + text, 10, 10);
         debounceKeyboard();
         timer = 0;
     }

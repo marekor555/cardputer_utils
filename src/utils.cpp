@@ -187,6 +187,64 @@ String scrollTextArrHighlight(const std::vector<String> msg, bool scrollX, int m
     return msg[highlight];
 }
 
+bool yesNoPopup(const String msg) {
+    debounceKeyboard();
+    M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
+    M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
+    const String options[2] = {"Yes", "No"};
+    int posx = 1, posy = 0;
+    int highlight = 0;
+    M5Cardputer.Lcd.fillScreen(TFT_BLACK);
+    M5Cardputer.Lcd.setTextSize(PRIM_FONT_SIZE);
+    M5Cardputer.Lcd.drawString(msg, 10, 10);
+    M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
+    for (int i = 0; i<2; i++) {
+        if (i == highlight) {
+            M5Cardputer.Lcd.fillRect(10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1) + 25, 10*4, 10 * SEC_FONT_SIZE, TFT_DARKGRAY);
+        }
+        M5Cardputer.Lcd.drawString(options[i], 10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1) + 25);
+    }
+    while (true) {
+        M5Cardputer.update();
+        if (M5Cardputer.Keyboard.isPressed()) {
+            const Keyboard_Class::KeysState status = M5Cardputer.Keyboard.keysState();
+            if (status.word.size() > 0) {
+                switch (status.word[0]) {
+                    case ';':
+                        highlight--;
+                        if (highlight < 0) highlight = 0;
+                        break;
+                    case '.':
+                        highlight++;
+                        if (highlight > 1) highlight = 1;
+                        break;
+                }
+            }
+            if (status.opt || status.enter) {
+                break;
+            }
+            M5Cardputer.Lcd.fillScreen(TFT_BLACK);
+            M5Cardputer.Lcd.setTextSize(PRIM_FONT_SIZE);
+            M5Cardputer.Lcd.drawString(msg, 10, 10);
+            M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
+            for (int i = 0; i<2; i++) {
+                if (i == highlight) {
+                    M5Cardputer.Lcd.fillRect(10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1) + 25, 10*4, 10 * SEC_FONT_SIZE, TFT_DARKGRAY);
+                }
+                M5Cardputer.Lcd.drawString(options[i], 10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1) + 25);
+            }
+            debounceKeyboard();
+        }
+    }
+
+    M5Cardputer.Lcd.setTextSize(PRIM_FONT_SIZE);
+    M5Cardputer.Lcd.setTextColor(PRIM_FONT_COLOR);
+
+    if (highlight == 0) return true;
+
+    return false;
+}
+
 void debounceKeyboard() {
     while (M5Cardputer.Keyboard.isPressed()) {
         M5Cardputer.update();
