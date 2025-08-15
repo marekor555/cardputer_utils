@@ -1,6 +1,12 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+
+/**
+ * sleeping function for cardputer, turns off the screen and enters light sleep
+ */
+void asleep();
+
 /**
  * prompt the user to input text
  * @param msg prompt message

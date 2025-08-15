@@ -3,6 +3,7 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <IRremote.h>
+#include <driver/uart.h>
 #include "utils.h"
 #include "config.h"
 #include "apps.h"
@@ -26,6 +27,7 @@ std::vector<String> commandList = {
 
 String text = "", lastCmd = "";
 int timer = 0, selectedCmd = 0;
+bool change = true;
 
 std::vector<String> available = {};
 
@@ -120,19 +122,14 @@ void setup() {
     esp_sleep_enable_ext0_wakeup(GPIO_NUM_0, 0);
     IrSender.begin(IR_PIN);
     WiFi.mode(WIFI_STA);
-    Serial.begin(115200);
+    Serial.begin(BAUD);
     const auto cfg = m5::M5Unified::config();
     M5Cardputer.begin(cfg, true);
 
+    M5Cardputer.Lcd.setBrightness(BRIGHTNESS);
     M5Cardputer.Lcd.setRotation(1);
     M5Cardputer.Lcd.setTextColor(PRIM_FONT_COLOR);
     M5Cardputer.Lcd.setTextSize(PRIM_FONT_SIZE);
-
-    M5Cardputer.Lcd.fillScreen(TFT_BLACK);
-    available = getAvaiableCommands(text, commandList);
-    drawCommands();
-    M5Cardputer.Lcd.fillRect(0, 0, 128, 25, TFT_BLACK);
-    M5Cardputer.Lcd.drawString(PROMPT, 10, 10);
 }
 
 void loop() {
@@ -142,27 +139,39 @@ void loop() {
         for (const auto i: status.word) {
             switch (i) {
                 case ';':
-                    if (selectedCmd > 0) selectedCmd--;
+                    if (selectedCmd > 0) {
+                        selectedCmd--;
+                        change = true;
+                    }
                     break;
                 case '.':
-                    if (selectedCmd < commandList.size() - 1) selectedCmd++;
+                    if (selectedCmd < commandList.size() - 1) {
+                        selectedCmd++;
+                        change = true;
+                    }
                     break;
                 default:
                     text += i;
+                    change = true;
             }
         }
         if (status.del) {
             text.remove(text.length() - 1);
+            change = true;
         }
         if (status.fn) {
             text = lastCmd;
+            change = true;
         }
         if (status.tab) {
             text = available[selectedCmd];
+            change = true;
         }
         if (status.enter) {
             text = available[selectedCmd];
             lastCmd = text;
+            change = true;
+
             M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
             M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
             if (text == "scan") {
@@ -275,15 +284,22 @@ void loop() {
             M5Cardputer.Lcd.setTextColor(PRIM_FONT_COLOR);
             text = "";
         }
+        debounceKeyboard();
+        timer = 0;
+    }
+    if (change) {
         M5Cardputer.Lcd.fillScreen(TFT_BLACK);
         available = getAvaiableCommands(text, commandList);
         drawCommands();
         M5Cardputer.Lcd.fillRect(0, 0, 128, 25, TFT_BLACK);
         M5Cardputer.Lcd.drawString(PROMPT + text, 10, 10);
-        debounceKeyboard();
-        timer = 0;
+        change = false;
     }
-    if (timer > 10000) esp_deep_sleep_start();
+    if (timer > SLEEP_TIME) {
+        asleep();
+        timer = 0;
+        change = true;
+    }
 
     timer++;
     delay(1);

@@ -9,8 +9,14 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-// Maximum length for recording operations (in samples)
-#define RECORDING_LENGHT 200
+#define BRIGHTNESS 255
+#define SLEEP_BRIGHTNESS 0
+
+// Serial baud rate
+#define BAUD 115200
+
+// Time until cardputer enters sleep
+#define SLEEP_TIME 5000
 
 // Command prompt symbol used in the text interface
 #define PROMPT "> "
@@ -49,7 +55,7 @@
 // Used for remote control functionality
 #define IR_PIN 44
 
-// Value used for controll of music speed
+// Value used for control of music speed
 #define MUSIC_SPEED 1
 
 #endif
