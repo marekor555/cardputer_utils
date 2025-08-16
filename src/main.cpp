@@ -32,18 +32,21 @@ bool change = true;
 std::vector<String> available = {};
 
 
-std::vector<String> getAvaiableCommands(String command, std::vector<String> cmdList) {
+std::vector<String> getAvailableCommands(String command, std::vector<String> cmdList) {
     if (command.length() == 0 || command.isEmpty()) return cmdList;
-    std::vector<String> avaiableCommands;
+    std::vector<String> availableCommands;
     for (const auto i : cmdList) {
-        if (i.startsWith(command)) avaiableCommands.push_back(i);
+        if (i.startsWith(command)) availableCommands.push_back(i);
     }
-    if (selectedCmd >= avaiableCommands.size())
-        selectedCmd = avaiableCommands.size() - 1;
-    return avaiableCommands;
+    if (selectedCmd >= availableCommands.size())
+        selectedCmd = availableCommands.size() - 1;
+    return availableCommands;
 }
 
 void drawCommands() {
+    if (selectedCmd == -1 && available.size() > 0) {
+        selectedCmd = 0;
+    }
     int shift = 0;
     if (selectedCmd > 8) {
         shift = (selectedCmd - 8) * -10;
@@ -289,7 +292,7 @@ void loop() {
     }
     if (change) {
         M5Cardputer.Lcd.fillScreen(TFT_BLACK);
-        available = getAvaiableCommands(text, commandList);
+        available = getAvailableCommands(text, commandList);
         drawCommands();
         M5Cardputer.Lcd.fillRect(0, 0, 128, 25, TFT_BLACK);
         M5Cardputer.Lcd.drawString(PROMPT + text, 10, 10);
