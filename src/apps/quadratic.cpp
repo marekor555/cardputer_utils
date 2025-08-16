@@ -61,10 +61,9 @@ void quadratic() {
 	float b = b_string.toFloat();
 	float c = c_string.toFloat();
 
-	drawQuadratic(a,b,c);
-
 	// M5Cardputer.Lcd.drawLine(POINT1_X+, point1_y, POINT2_X, point2_y, TFT_RED);
-	bool update = false;
+	bool update = true;
+	int timer = 0;
 	while (true) {
 		M5Cardputer.update();
 		if (M5Cardputer.Keyboard.isPressed()) {
@@ -101,11 +100,19 @@ void quadratic() {
 					default:
 						break;
 				}
-				if (update) {
-					drawQuadratic(a,b,c);
-					update = false;
-				}
 			}
+			timer = 0;
 		}
+		if (update) {
+			drawQuadratic(a,b,c);
+			update = false;
+		}
+		if (timer > SLEEP_TIME) {
+			asleep();
+			timer = 0;
+			update = true;
+		}
+		timer++;
+		delay(1);
 	}
 }

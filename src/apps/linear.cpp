@@ -4,13 +4,8 @@
 #include "config.h"
 #include "apps.h"
 
-void linear() {
-  	M5Cardputer.Lcd.fillScreen(TFT_BLACK);
-	const String a_string = prompt("Enter A:");
-	const String b_string = prompt("Enter B:");
-	const float a = a_string.toFloat();
-	const float b = b_string.toFloat()*STEP*2;
 
+void drawLinear(const float a, const float b) {
 	const float point1_y = a*POINT1_X + b;
 	const float point2_y = a*POINT2_X + b;
 
@@ -40,6 +35,59 @@ void linear() {
 
 	// linear function
 	M5Cardputer.Lcd.drawLine(x1_screen, y1_screen, x2_screen, y2_screen, TFT_CYAN);
+	M5Cardputer.Lcd.drawString("A="+String(a), 10, 10);
+	M5Cardputer.Lcd.drawString("B="+String(b/20), 10, 20);
+}
+
+void linear() {
+  	M5Cardputer.Lcd.fillScreen(TFT_BLACK);
+	const String a_string = prompt("Enter A:");
+	const String b_string = prompt("Enter B:");
+	float a = a_string.toFloat();
+	float b = b_string.toFloat()*20;
+
+	bool update = true;
+	int timer = 0;
+	while (true) {
+		M5Cardputer.update();
+		if (M5Cardputer.Keyboard.isPressed()) {
+			const Keyboard_Class::KeysState status = M5Cardputer.Keyboard.keysState();
+			if (status.opt) {
+				break;
+			}
+			if (!status.word.empty()) {
+				switch (status.word[0]) {
+					case ';':
+						b+=0.1*20;
+						update = true;
+						break;
+					case '.':
+						b-=0.1*20;
+						update = true;
+						break;
+					case ',':
+						a+=0.1;
+						update = true;
+						break;
+					case '/':
+						a-=0.1;
+						update = true;
+				}
+			}
+			timer = 0;
+		}
+		if (update) {
+			drawLinear(a, b);
+			update = false;
+		}
+		if (timer > SLEEP_TIME) {
+			asleep();
+			timer = 0;
+			update = true;
+		}
+		timer++;
+		delay(1);
+	}
 
 	// M5Cardputer.Lcd.drawLine(POINT1_X+, point1_y, POINT2_X, point2_y, TFT_RED);
 	wait("", false);
