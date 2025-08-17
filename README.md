@@ -1,3 +1,11 @@
+
+# 📄 Licensing
+
+cardputer_utils  © 2025 by Marekor555 is licensed under CC BY-SA 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/4.0/
+
+This software is provided "as-is", without any warranty. The author is not responsible for any damages, data loss, or other issues arising from its use.
+
+
 This project uses third-party libraries.  
 Their licenses can be found in the library_licenses/ folder.
 
