@@ -20,15 +20,21 @@ void quadratic();
  */
 void music();
 
-/**
- * Function to handle remote control functionalities for Samsung TV.
- */
-void irSam();
 
 /**
  * Function to handle file exploring and viewing.
  */
 void fileExplorer();
+
+/**
+ * Function for network connection
+ */
+void scanAndConnectNetwork();
+
+/**
+ * Function to web requests
+ */
+void webRequest();
 
 #define APPS_H
 

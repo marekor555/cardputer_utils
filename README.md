@@ -1,3 +1,6 @@
+This project uses third-party libraries.  
+Their licenses can be found in the library_licenses/ folder.
+
 # 📟 M5Cardputer Command Suite
 
 A multifunctional firmware for the **M5Stack Cardputer**, written for PlatformIO.  

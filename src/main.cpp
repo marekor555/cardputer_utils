@@ -178,60 +178,9 @@ void loop() {
             M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
             M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
             if (text == "scan") {
-                info("Scanning network");
-                const int n = WiFi.scanNetworks();
-                M5Cardputer.Lcd.fillScreen(TFT_BLACK);
-                std::vector<String> networks;
-                networks.push_back("|back|");
-                for (int i = 0; i < n; i++) {
-                    networks.push_back(WiFi.SSID(i).c_str());
-                }
-                String selectedNetwork = scrollTextArrHighlight(networks, false, SEC_FONT_COLOR, PRIM_FONT_COLOR);
-                if (selectedNetwork != "|back|") {
-                    const String ssid = selectedNetwork;
-                    debounceKeyboard();
-                    const String passwd = prompt("Password: ");
-                    WiFi.begin(ssid, passwd);
-                    M5Cardputer.Lcd.fillScreen(TFT_BLACK);
-                    M5Cardputer.Lcd.drawString("Connecting", 10, 15);
-                    unsigned long startAttemptTime = millis();
-                    while (WiFi.status() != WL_CONNECTED) {
-                        if (M5Cardputer.Keyboard.isPressed()) {
-                            const auto status = M5Cardputer.Keyboard.keysState();
-                            if (status.opt) break;
-                        }
-                        if (millis() - startAttemptTime >= TIMEOUT) {
-                            wait("TIMEOUT!", true);
-                            break;
-                        }
-                    }
-                }
+                scanAndConnectNetwork();
             } else if (text == "req") {
-                if (WiFi.isConnected()) {
-                    WiFiClient client;
-                    HTTPClient http;
-                    const String url = prompt("URL: http://www.");
-                    info("Getting request");
-                    http.begin(client, "http://www." + url);
-                    http.setTimeout(TIMEOUT);
-                    const int httpCode = http.GET();
-
-                    if (httpCode > 0) {
-                        String response = http.getString();
-                        if (response.length() > 0) {
-                            String parsedResponse = "";
-                            for (int i = 0; i < response.length(); i++) {
-                                if (i % 38 == 0) parsedResponse += "\n";
-                                parsedResponse += response[i];
-                            }
-                            scrollText(parsedResponse.c_str(), true);
-                        }
-                        else wait(http.errorToString(httpCode), true);
-                    } else wait(http.errorToString(httpCode), true);
-                    http.end();
-                } else {
-                    wait("Not connected", true);
-                }
+                webRequest();
             } else if (text == "music") {
                 music();
             } else if (text == "irNec") {
