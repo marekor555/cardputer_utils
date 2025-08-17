@@ -69,6 +69,8 @@ void webRequest() {
 		} else wait(http.errorToString(httpCode), true);
 		http.end();
 	} else {
-		wait("Not connected", true);
+		const bool connect = yesNoPopup("Connect to WiFi?");
+		if (connect) scanAndConnectNetwork();
 	}
 }
+

@@ -92,6 +92,7 @@ Keys:
 
 - browse files
 - read files
+- playing audio files (16bit signed, WAV format)
 - [SOON] file operations (edit, create, delete)
 
 ---

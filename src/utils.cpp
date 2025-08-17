@@ -68,6 +68,8 @@ void wait(const String msg, const bool clearScreen) {
         if (timer > SLEEP_TIME) {
             asleep();
             timer = 0;
+            M5Cardputer.Lcd.fillScreen(TFT_BLACK);
+            M5Cardputer.Lcd.drawString(msg, 10, 10);
         }
         timer++;
         delay(1);
