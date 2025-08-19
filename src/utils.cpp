@@ -326,8 +326,8 @@ bool yesNoPopup(const String msg) {
         delay(1);
     }
 
-    M5Cardputer.Lcd.setTextSize(PRIM_FONT_SIZE);
-    M5Cardputer.Lcd.setTextColor(PRIM_FONT_COLOR);
+    M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
+    M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
 
     if (highlight == 0) return true;
 
