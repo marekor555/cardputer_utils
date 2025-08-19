@@ -93,7 +93,21 @@ Keys:
 - browse files
 - read files
 - playing audio files (16bit signed, WAV format)
-- [SOON] file operations (edit, create, delete)
+- file operations (edit, create, delete)
+
+#### Audio player keybinds
+| Button  | Action         |
+|---------|----------------|
+| opt     | exit file      |
+| Up/Down | volume up/down |
+
+#### how to edit files
+| Button | Action                              |
+|--------|-------------------------------------|
+| opt    | exit file                           |
+| fn     | enter move mode( move with arrows ) |
+| del    | delete character                    |
+
 
 ---
 

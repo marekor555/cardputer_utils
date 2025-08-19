@@ -83,6 +83,115 @@ void playMusic() {
 	wait("Finished playing", true);
 }
 
+void textEdit(const String path) {
+	File file = SD.open(path);
+	int xPos = 0, yPos = 0, timer = 0;
+	bool update = true, viewMode = false;;
+
+	std::vector<String> lines;
+	while (file.available()) {
+		lines.push_back(file.readStringUntil('\n'));
+	}
+	file.close();
+	if (lines.empty()) lines.push_back("");
+
+	while (true) {
+		M5Cardputer.update();
+		if (M5Cardputer.Keyboard.isPressed()) {
+			const auto status = M5Cardputer.Keyboard.keysState();
+			if (status.opt) break;
+			if (status.enter) {
+				String line = lines[yPos].substring(xPos);
+				lines[yPos] = lines[yPos].substring(0, xPos);
+				lines.insert(lines.begin() + yPos + 1, line);
+				yPos++;
+				xPos = 0;
+				update = true;
+			}
+			if (status.del) {
+				if (xPos > 0) {
+					lines[yPos].remove(xPos - 1, 1);
+					xPos--;
+				} else if (yPos > 0) {
+					xPos = lines[yPos - 1].length();
+					lines[yPos - 1] += lines[yPos];
+					lines.erase(lines.begin() + yPos);
+					yPos--;
+				}
+				update = true;
+			}
+			if (status.fn) {
+				viewMode = !viewMode;
+				update = true;
+			}
+			for (const auto i : status.word) {
+				if (viewMode) {
+					switch (i) {
+						case '.':
+							if (yPos < lines.size() - 1) {
+								yPos++;
+							}
+							break;
+						case ';':
+							if (yPos > 0 ) {
+								yPos--;
+							}
+							break;
+						case ',':
+							if (xPos > 0) {
+								xPos--;
+							}
+							break;
+						case '/':
+							if (xPos < lines[yPos].length()) {
+								xPos++;
+							}
+							break;
+					}
+				} else {
+					lines[yPos] = lines[yPos].substring(0, xPos) + i + lines[yPos].substring(xPos);
+					xPos++;
+				}
+				update = true;
+			}
+			debounceKeyboard();
+			timer = 0;
+		}
+		if (update) {
+			M5Cardputer.Lcd.fillScreen(TFT_BLACK);
+			M5Cardputer.Lcd.drawString(path + " " + viewMode, 10, 10);
+			xPos = min(xPos, static_cast<int>(lines[yPos].length()));
+			for (int i = 0; i < lines.size(); i++) {
+				String line = lines[i];
+				if (yPos == i) {
+					if (xPos < line.length())
+						line.setCharAt(xPos, '*');
+					else line += "*";
+				}
+				M5Cardputer.Lcd.drawString(line, 10, 20 + i * 10);
+			}
+			update = false;
+		}
+		if (timer > SLEEP_TIME) {
+			asleep();
+			timer = 0;
+			update = true;
+		}
+		timer++;
+		delay(1);
+	}
+
+	const bool save = yesNoPopup("Save changes?");
+	if (save) {
+		file = SD.open(path, FILE_WRITE);
+		for (const auto line : lines) {
+			file.println(line);
+		}
+		file.close();
+		wait("Saved", true);
+	}
+}
+
 void fileExplorer() {
 	debounceKeyboard();
 	SPI.begin(40, 39, 14, 12);
@@ -94,6 +203,7 @@ void fileExplorer() {
 		files.clear();
 		if (viewPath == "/") files.push_back("||-exit-||");
 		if (viewPath != "/") files.push_back("|..|");
+		files.push_back("||-new file-||");
 		while (file) {
 			if (file.isDirectory()) {
 				files.push_back("|"+String(file.name())+"|");
@@ -114,7 +224,13 @@ void fileExplorer() {
 		if (filename == "||-exit-||") {
 			SD.end();
 			return;
-		} if (filename == "|..|") {
+		} if (filename == "||-new file-||") {
+			debounceKeyboard();
+			String newFile = prompt("New file name: ");
+			File newFileObj = SD.open(viewPath + "/" + newFile, FILE_WRITE);
+			newFileObj.close();
+			wait("Created", true);
+		}else if (filename == "|..|") {
 			viewPath = viewPath.substring(0, viewPath.lastIndexOf("/"));
 		} else {
 			if (filename.startsWith("|") && filename.endsWith("|")) {
@@ -151,6 +267,8 @@ void fileExplorer() {
 							}
 						}
 					}
+				} else if (selected == "Edit") {
+					textEdit(viewPath + "/" + filename);
 				}
 			} else {
 				viewPath += "/" + filename;
