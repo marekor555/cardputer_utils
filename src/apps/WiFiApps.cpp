@@ -38,11 +38,11 @@ void scanAndConnectNetwork() {
 				wait("No network found", true);
 			}
 			if (WiFi.status() == WL_DISCONNECTED) {
-				wait("Disconnected", true);
+				break;
 			}
 		}
 	}
-	wait("Connected successfully", true);
+	if (WiFi.status() == WL_CONNECTED) wait("Connected successfully", true);
 }
 
 void webRequest() {
@@ -71,6 +71,7 @@ void webRequest() {
 	} else {
 		const bool connect = yesNoPopup("Connect to WiFi?");
 		if (connect) scanAndConnectNetwork();
+		if (WiFi.isConnected()) webRequest();
 	}
 }
 

@@ -23,6 +23,7 @@ std::vector<String> commandList = {
     "quadratic",
     "battery",
     "files",
+    "open-meteo",
 };
 
 String text = "", lastCmd = "";
@@ -211,6 +212,8 @@ void loop() {
                 wait("Level: " + String(M5Cardputer.Power.getBatteryLevel()), true);
             } else if (text == "files") {
                 fileExplorer();
+            } else if (text == "open-meteo") {
+                openMeteo();
             } else if (text == "help") {
                 std::vector<String> options = {
                     "scan      - scan and connect network",

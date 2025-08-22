@@ -36,6 +36,11 @@ void scanAndConnectNetwork();
  */
 void webRequest();
 
+/**
+ * Function to call open meteo
+ */
+void openMeteo();
+
 #define APPS_H
 
 #endif //APPS_H

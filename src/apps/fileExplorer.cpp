@@ -86,7 +86,7 @@ void playMusic() {
 void textEdit(const String path) {
 	File file = SD.open(path);
 	int xPos = 0, yPos = 0, timer = 0;
-	bool update = true, viewMode = false;;
+	bool update = true, viewMode = false;
 
 	std::vector<String> lines;
 	while (file.available()) {
