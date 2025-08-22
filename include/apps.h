@@ -41,6 +41,11 @@ void webRequest();
  */
 void openMeteo();
 
+/*
+ * Snake game
+ */
+void snakeGame();
+
 #define APPS_H
 
 #endif //APPS_H

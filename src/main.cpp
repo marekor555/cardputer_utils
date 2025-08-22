@@ -11,6 +11,7 @@
 
 std::vector<String> commandList = {
     "help",
+    "snake",
     "scan",
     "req",
     "music",
@@ -214,6 +215,8 @@ void loop() {
                 fileExplorer();
             } else if (text == "open-meteo") {
                 openMeteo();
+            } else if (text == "snake") {
+                snakeGame();
             } else if (text == "help") {
                 std::vector<String> options = {
                     "scan      - scan and connect network",
