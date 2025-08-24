@@ -90,6 +90,7 @@ void openMeteo() {
 			}
 
 			if (update) {
+				M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
 				M5Cardputer.Lcd.fillScreen(TFT_BLACK);
 				M5Cardputer.Lcd.setTextColor(TFT_CYAN);
 				M5Cardputer.Lcd.drawString(time + " " + cityName, 10, 10);

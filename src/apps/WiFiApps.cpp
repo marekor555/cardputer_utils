@@ -23,7 +23,7 @@ void scanAndConnectNetwork() {
 		const String passwd = prompt("Password: ");
 		WiFi.begin(ssid, passwd);
 		M5Cardputer.Lcd.fillScreen(TFT_BLACK);
-		M5Cardputer.Lcd.drawString("Connecting...", 10, 15);
+		info("Connecting...");
 		while (WiFi.status() != WL_CONNECTED) {
 			M5Cardputer.update();
 			if (M5Cardputer.Keyboard.isPressed()) {

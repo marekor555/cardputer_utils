@@ -89,6 +89,8 @@ void snakeGame() {
 				M5Cardputer.Lcd.fillRect(i*PIXEL_SIZE, j*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color);
 			}
 			if (update) {
+				M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
+				M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
 				M5Cardputer.Lcd.fillRect(GRID_SIZE*PIXEL_SIZE, 0, 240-GRID_SIZE*PIXEL_SIZE, 135, TFT_BLACK);
 				M5Cardputer.Lcd.drawString("SCORE: " + String(snakeLength), GRID_SIZE*PIXEL_SIZE+10, 10);
 				update = false;

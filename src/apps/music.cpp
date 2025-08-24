@@ -60,13 +60,8 @@ void music() {
 	debounceKeyboard();
 	M5Cardputer.Speaker.setVolume(200);
 	String text = "";
-	M5Cardputer.Lcd.fillScreen(TFT_BLACK);
-	M5Cardputer.Lcd.drawString(PROMPT + text, 10, 10);
-	int yMove = 0;
-	for (const auto i: std::vector<float>(tones.rbegin(), tones.rend())) {
-		M5Cardputer.Lcd.drawString(String(i), 10, 30 + yMove);
-		yMove += 10 * SEC_FONT_SIZE;
-	}
+	bool update = true;
+	int timer = 0;
 	while (true) {
 		M5Cardputer.update();
 		if (M5Cardputer.Keyboard.isPressed()) {
@@ -100,6 +95,10 @@ void music() {
 					tones.pop_back();
 				}
 			}
+			update = true;
+			debounceKeyboard();
+		}
+		if (update) {
 			M5Cardputer.Lcd.fillScreen(TFT_BLACK);
 			M5Cardputer.Lcd.drawString(PROMPT + text, 10, 10);
 			int yMove = 0;
@@ -107,7 +106,7 @@ void music() {
 				M5Cardputer.Lcd.drawString(String(i), 10, 30 + yMove);
 				yMove += 10 * SEC_FONT_SIZE;
 			}
-			debounceKeyboard();
+			update = false;
 		}
 	}
 }

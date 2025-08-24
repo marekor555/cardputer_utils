@@ -133,8 +133,6 @@ void setup() {
 
     M5Cardputer.Lcd.setBrightness(BRIGHTNESS);
     M5Cardputer.Lcd.setRotation(1);
-    M5Cardputer.Lcd.setTextColor(PRIM_FONT_COLOR);
-    M5Cardputer.Lcd.setTextSize(PRIM_FONT_SIZE);
 }
 
 void loop() {
@@ -237,15 +235,14 @@ void loop() {
                 Serial.println("Command not recognized");
                 wait("Command not recognized", true);
             }
-
-            M5Cardputer.Lcd.setTextSize(PRIM_FONT_SIZE);
-            M5Cardputer.Lcd.setTextColor(PRIM_FONT_COLOR);
             text = "";
         }
         debounceKeyboard();
         timer = 0;
     }
     if (change) {
+        M5Cardputer.Lcd.setTextColor(PRIM_FONT_COLOR);
+        M5Cardputer.Lcd.setTextSize(PRIM_FONT_SIZE);
         M5Cardputer.Lcd.fillScreen(TFT_BLACK);
         available = getAvailableCommands(text, commandList);
         drawCommands();

@@ -33,6 +33,8 @@ void playMusic() {
 	uint8_t buffer[1024];
 	bool update = true;
 
+	M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
+	M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
 	M5Cardputer.Lcd.fillScreen(TFT_BLACK);
 	M5Cardputer.Lcd.drawString("Playing: " + filename, 10, 10);
 	M5Cardputer.Lcd.drawString("Volume: ", 10, 20);
@@ -158,6 +160,8 @@ void textEdit(const String path) {
 			timer = 0;
 		}
 		if (update) {
+			M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
+			M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
 			M5Cardputer.Lcd.fillScreen(TFT_BLACK);
 			M5Cardputer.Lcd.drawString(path + " " + viewMode, 10, 10);
 			xPos = min(xPos, static_cast<int>(lines[yPos].length()));

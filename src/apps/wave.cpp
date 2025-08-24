@@ -45,6 +45,8 @@ void drawWave(const float freq, const float amp) {
 		last_x = x;
 		last_y = y;
 	}
+	M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
+	M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
 	M5Cardputer.Lcd.drawString("FREQ="+String(freq*STEP_SIN), 10, 10);
 	M5Cardputer.Lcd.drawString("AMP="+String(amp/STEP_SIN), 10, 20);
 }

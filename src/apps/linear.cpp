@@ -34,6 +34,8 @@ void drawLinear(const float a, const float b) {
 	}
 
 	// linear function
+	M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
+	M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
 	M5Cardputer.Lcd.drawLine(x1_screen, y1_screen, x2_screen, y2_screen, TFT_CYAN);
 	M5Cardputer.Lcd.drawString("A="+String(a), 10, 10);
 	M5Cardputer.Lcd.drawString("B="+String(b/20), 10, 20);
@@ -47,7 +49,6 @@ void linear() {
 	float b = b_string.toFloat()*20;
 
 	bool update = true;
-	int timer = 0;
 	while (true) {
 		M5Cardputer.update();
 		if (M5Cardputer.Keyboard.isPressed()) {
@@ -74,19 +75,11 @@ void linear() {
 						update = true;
 				}
 			}
-			timer = 0;
 		}
 		if (update) {
 			drawLinear(a, b);
 			update = false;
 		}
-		if (timer > SLEEP_TIME) {
-			asleep();
-			timer = 0;
-			update = true;
-		}
-		timer++;
-		delay(1);
 	}
 
 	// M5Cardputer.Lcd.drawLine(POINT1_X+, point1_y, POINT2_X, point2_y, TFT_RED);

@@ -34,6 +34,8 @@ String prompt(const String msg) {
             timer = 0;
         }
         if (change) {
+            M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
+            M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
             M5Cardputer.Lcd.fillScreen(TFT_BLACK);
             M5Cardputer.Lcd.drawString(msg + output, 10, 10);
             change = false;
@@ -52,6 +54,8 @@ String prompt(const String msg) {
 
 void wait(const String msg, const bool clearScreen) {
     if (clearScreen) {
+        M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
+        M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
         M5Cardputer.Lcd.fillScreen(TFT_BLACK);
         M5Cardputer.Lcd.drawString(msg, 10, 10);
     }
@@ -68,6 +72,8 @@ void wait(const String msg, const bool clearScreen) {
         if (timer > SLEEP_TIME) {
             asleep();
             timer = 0;
+            M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
+            M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
             M5Cardputer.Lcd.fillScreen(TFT_BLACK);
             M5Cardputer.Lcd.drawString(msg, 10, 10);
         }
@@ -77,6 +83,8 @@ void wait(const String msg, const bool clearScreen) {
 }
 
 void info(const String msg) {
+    M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
+    M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
     M5Cardputer.Lcd.fillScreen(TFT_BLACK);
     M5Cardputer.Lcd.drawString(msg, 10, 10);
 }
@@ -123,6 +131,8 @@ void scrollText(const String msg, bool scrollX) {
             timer = 0;
         }
         if (change) {
+            M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
+            M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
             M5Cardputer.Lcd.fillScreen(TFT_BLACK);
             M5Cardputer.Lcd.setCursor(0, 10*posy);
             M5Cardputer.Lcd.println(msg);
@@ -179,6 +189,8 @@ void scrollTextArr(const std::vector<String> msg, bool scrollX) {
             timer = 0;
         }
         if (change) {
+            M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
+            M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
             M5Cardputer.Lcd.fillScreen(TFT_BLACK);
             for (int i = 0; i<msg.size(); i++) {
                 M5Cardputer.Lcd.drawString(msg[i], 10*posx, 10 * posy + 10 * SEC_FONT_SIZE * (i + 1));
@@ -240,6 +252,8 @@ String scrollTextArrHighlight(const std::vector<String> msg, bool scrollX, int m
             timer = 0;
         }
         if (change) {
+            M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
+            M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
             M5Cardputer.Lcd.fillScreen(TFT_BLACK);
             for (int i = 0; i<msg.size(); i++) {
                 if (i == highlight) {
@@ -274,8 +288,6 @@ bool yesNoPopup(const String msg) {
     bool change = true;
     int timer = 0;
 
-    M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
-    M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
     while (true) {
         M5Cardputer.update();
         if (M5Cardputer.Keyboard.isPressed()) {
@@ -305,6 +317,7 @@ bool yesNoPopup(const String msg) {
             timer = 0;
         }
         if (change) {
+            M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
             M5Cardputer.Lcd.fillScreen(TFT_BLACK);
             M5Cardputer.Lcd.setTextSize(PRIM_FONT_SIZE);
             M5Cardputer.Lcd.drawString(msg, 10, 10);
@@ -325,9 +338,6 @@ bool yesNoPopup(const String msg) {
         timer++;
         delay(1);
     }
-
-    M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
-    M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
 
     if (highlight == 0) return true;
 
