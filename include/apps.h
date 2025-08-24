@@ -46,6 +46,11 @@ void openMeteo();
  */
 void snakeGame();
 
+/*
+ * Snow animation
+*/
+void snowAnimation();
+
 #define APPS_H
 
 #endif //APPS_H
