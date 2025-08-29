@@ -26,6 +26,7 @@ std::vector<String> commandList = {
     "files",
     "open-meteo",
     "snow",
+    "clicker",
 };
 
 String text = "", lastCmd = "";
@@ -218,6 +219,8 @@ void loop() {
                 snakeGame();
             } else if (text == "snow") {
                 snowAnimation();
+            } else if (text == "clicker") {
+                clicker();
             } else if (text == "help") {
                 std::vector<String> options = {
                     "scan      - scan and connect network",

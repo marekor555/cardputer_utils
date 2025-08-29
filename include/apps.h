@@ -51,6 +51,11 @@ void snakeGame();
 */
 void snowAnimation();
 
+/*
+ * Clicker
+*/
+void clicker();
+
 #define APPS_H
 
 #endif //APPS_H
