@@ -55,8 +55,8 @@ void wave() {
 	M5Cardputer.Lcd.fillScreen(TFT_BLACK);
 	const String amp_string = prompt("Enter amplitude:");
 	const String freq_string = prompt("Enter frequency:");
-	float freq = amp_string.toFloat();
-	float amp = freq_string.toFloat();
+	float freq = freq_string.toFloat();
+	float amp = amp_string.toFloat();
 
 	drawWave(freq/STEP_SIN, amp*STEP_SIN);
 	bool update = false;

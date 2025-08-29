@@ -25,9 +25,9 @@ void snowAnimation() {
 
         for (int i = 239; i >= 0; i--) {
             for (int j = 133; j >= 0 ; j--) {
-                if (screen[i][j] == 1 && (screen[i][j+1] == 0 || screen[constrain(i-1, 0, 239)][j+1] == 0 || screen[constrain(i-1, 0, 239)][j+1] == 0)) {
-                    const int offset = random(-2, 3);
-                    if (screen[i+offset][j+1] != 1) {
+                if (screen[i][j] == 1 && (screen[i][j+1] == 0 || screen[constrain(i+1, 0, 239)][j+1] == 0 || screen[constrain(i-1, 0, 239)][j+1] == 0)) {
+                    const int offset = random(-1, 2);
+                    if (screen[i+offset][j+1] == 0) {
                         screen[i+offset][j+1] = 1;
                         screen[i][j] = 0;
                         M5Cardputer.Lcd.drawPixel(i, j, TFT_BLACK);
