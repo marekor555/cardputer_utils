@@ -56,6 +56,11 @@ void snowAnimation();
 */
 void clicker();
 
+/*
+ * Morse code
+*/
+void morse();
+
 #define APPS_H
 
 #endif //APPS_H
