@@ -88,9 +88,13 @@ void morse() {
 			debounceKeyboard();
 		}
 		if (update) {
+			M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
+			M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
 			M5Cardputer.Lcd.fillScreen(TFT_BLACK);
-			M5Cardputer.Lcd.drawString(input, 10, 10);
+			M5Cardputer.Lcd.drawString(PROMPT + input, 10, 10);
+			M5Cardputer.Lcd.setTextColor(TFT_CYAN);
 			M5Cardputer.Lcd.drawString("Press enter to play", 10, 30);
+			M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
 			M5Cardputer.Lcd.drawString(charToMorse(input), 10, 50);
 			update = false;
 		}

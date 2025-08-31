@@ -61,6 +61,11 @@ void clicker();
 */
 void morse();
 
+/*
+ * Battery status viewer
+*/
+void battery();
+
 #define APPS_H
 
 #endif //APPS_H

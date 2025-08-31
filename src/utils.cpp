@@ -345,6 +345,7 @@ bool yesNoPopup(const String msg) {
 }
 
 void debounceKeyboard() {
+    M5Cardputer.update();
     while (M5Cardputer.Keyboard.isPressed()) {
         M5Cardputer.update();
         const auto status = M5Cardputer.Keyboard.keysState();
@@ -352,5 +353,6 @@ void debounceKeyboard() {
             delay(100);
             break;
         }
+        delay(10);
     }
 }

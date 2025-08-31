@@ -211,7 +211,7 @@ void loop() {
                 delay(250);
                 quadratic();
             } else if (text == "battery") {
-                wait("Level: " + String(M5Cardputer.Power.getBatteryLevel()), true);
+                battery();
             } else if (text == "files") {
                 fileExplorer();
             } else if (text == "open-meteo") {

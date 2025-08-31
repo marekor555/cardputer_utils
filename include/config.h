@@ -1,8 +1,3 @@
-/*
- * This file may be shared.
- * By MAREKOR555
- * Config file for cardputer_utils
- */
 #pragma once
 #include <M5Cardputer.h>
 
@@ -16,7 +11,7 @@
 #define BAUD 115200
 
 // Time until cardputer enters sleep
-#define SLEEP_TIME 5000
+#define SLEEP_TIME 10000
 
 // Command prompt symbol used in the text interface
 #define PROMPT "> "
