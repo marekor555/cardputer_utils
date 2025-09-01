@@ -66,6 +66,11 @@ void morse();
 */
 void battery();
 
+/*
+ * Jammer
+*/
+void jammer();
+
 #define APPS_H
 
 #endif //APPS_H

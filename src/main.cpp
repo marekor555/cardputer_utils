@@ -28,6 +28,7 @@ std::vector<String> commandList = {
     "snow",
     "clicker",
     "morse",
+    "jammer",
 };
 
 String text = "", lastCmd = "";
@@ -224,6 +225,8 @@ void loop() {
                 clicker();
             } else if (text == "morse") {
                 morse();
+            } else if (text == "jammer") {
+                jammer();
             } else if (text == "help") {
                 std::vector<String> options = {
                     "scan      - scan and connect network",
