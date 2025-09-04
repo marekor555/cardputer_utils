@@ -111,32 +111,34 @@ Keys:
 ### 📻 Morse code generator
 
 - enter text to convert into morse code
-- press 'enter' to play morse code
+- press ``enter`` to play morse code
 
 ### ❄️ Snow animation
 
 - snowflake falling animation
-- press 'opt' to stop animation
+- press ``opt`` to stop animation
 
 ### 🧮 Counter clicker
 
-- press 'Up' to increase the value
-- press 'Down' to decrease the value
-- press 'opt' to exit 
+- press ``Up`` to increase the value
+- press ``Down`` to decrease the value
+- press ``opt`` to exit 
 
 ### 🐍 Snake game
 
-- press 'Up' to move up
-- press 'Down' to move down
-- press 'Left' to move left
-- press 'Right' to move right
-- press 'opt' to exit
+- press ``Up`` to move up
+- press ``Down`` to move down
+- press ``Left`` or A to move left
+- press ``Right`` or S to move right
+- press P or ' to pause
+- press `opt` to exit
 
 ---
 
 ## 🔧 Configuration
 
-Every configuration value is defined in `config.h`. To see usages of these values consider looking into code.
+Almost every configuration value is defined in `config.h`. To see usages of these values, consider looking into code.
+Some of these values should not be changed.
 Documentation is in progress.
 
 ## 🚀 Flashing the Project

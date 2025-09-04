@@ -29,6 +29,7 @@ int grid[GRID_SIZE][GRID_SIZE];
 void snakeGame() {
 	M5Cardputer.Lcd.fillScreen(TFT_BLACK);
 	Direction direction = RIGHT;
+	Direction frameDirection = RIGHT;
 	int snakeLength = 1;
 	std::vector<std::array<int, 2>> positions;
 	std::array<int, 2> snakeHead = {GRID_SIZE/4, GRID_SIZE/2};
@@ -41,7 +42,7 @@ void snakeGame() {
 	grid[10][10] = FOOD;
 
 	unsigned long timer = millis();
-	bool update = true;
+	bool update = true, paused = false;
 	while (true) {
 		M5Cardputer.update();
 		if (M5Cardputer.Keyboard.isPressed()) {
@@ -50,25 +51,37 @@ void snakeGame() {
 			for (const auto i: status.word) {
 				switch (i) {
 					case ';':
-						if (direction != DOWN) direction = UP;
+						if (frameDirection != DOWN) direction = UP;
 						break;
 					case '.':
-						if (direction != UP) direction = DOWN;
+						if (frameDirection != UP) direction = DOWN;
 						break;
 					case ',':
-						if (direction != RIGHT) direction = LEFT;
+					case 'a':
+						if (frameDirection != RIGHT) direction = LEFT;
 						break;
 					case '/':
-						if (direction != LEFT) direction = RIGHT;
+					case 's':
+						if (frameDirection != LEFT) direction = RIGHT;
+						break;
+					case 'p':
+					case '\'':
+						paused = !paused;
+						debounceKeyboard();
 						break;
 				}
 			}
 		}
 
+		if (paused) {
+			timer = millis();
+			continue;
+		}
 
 		if (millis() - timer < 200) {
 			continue;
 		}
+		frameDirection = direction;
 		timer = millis();
 
 		// draw
@@ -83,7 +96,8 @@ void snakeGame() {
 						color = TFT_RED;
 						break;
 					case SNAKE:
-						color = TFT_GREEN;
+						if (i == snakeHead[0] && j == snakeHead[1]) color = TFT_GREENYELLOW;
+						else color = TFT_GREEN;
 						break;
 				}
 				M5Cardputer.Lcd.fillRect(i*PIXEL_SIZE, j*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color);
