@@ -12,7 +12,7 @@ float quadratic_equation(const float a, const float b, const float c, const floa
 void drawQuadratic(const float a, const float b, const float c) {
 	int positions[240];
 	for (int i = 0; i < 240; i++) {
-		positions[i] = quadratic_equation(-a,-b,c,(i-120)/STEP) * STEP;
+		positions[i] = quadratic_equation(-a,-b,-c,(i-120)/STEP) * STEP;
 	}
 
 	constexpr int y_cent = 67;
@@ -65,6 +65,7 @@ void quadratic() {
 
 	// M5Cardputer.Lcd.drawLine(POINT1_X+, point1_y, POINT2_X, point2_y, TFT_RED);
 	bool update = true;
+	bool debounce = false;
 	while (true) {
 		M5Cardputer.update();
 		if (M5Cardputer.Keyboard.isPressed()) {
@@ -75,11 +76,11 @@ void quadratic() {
 			if (!status.word.empty()) {
 				switch (status.word[0]) {
 					case ';':
-						c -= 0.25;
+						c += 0.25;
 						update = true;
 						break;
 					case '.':
-						c += 0.25;
+						c -= 0.25;
 						update = true;
 						break;
 					case ',':
@@ -98,9 +99,15 @@ void quadratic() {
 						b -= 0.1;
 						update = true;
 						break;
+					case 'd':
+						debounce = !debounce;
+						break;
 					default:
 						break;
 				}
+			}
+			if (debounce) {
+				debounceKeyboard();
 			}
 		}
 		if (update) {

@@ -12,6 +12,7 @@ void asleep() {
 }
 
 String prompt(const String msg) {
+    debounceKeyboard();
     String output = "";
     bool change = true;
     int timer = 0;
@@ -53,6 +54,7 @@ String prompt(const String msg) {
 }
 
 void wait(const String msg, const bool clearScreen) {
+    debounceKeyboard();
     if (clearScreen) {
         M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
         M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
@@ -83,6 +85,7 @@ void wait(const String msg, const bool clearScreen) {
 }
 
 void info(const String msg) {
+    debounceKeyboard();
     M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
     M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
     M5Cardputer.Lcd.fillScreen(TFT_BLACK);
@@ -91,6 +94,7 @@ void info(const String msg) {
 
 
 void scrollText(const String msg, bool scrollX) {
+    debounceKeyboard();
     int posx = 1, posy = 0;
     bool change = true;
     int timer = 0;
@@ -149,6 +153,7 @@ void scrollText(const String msg, bool scrollX) {
 }
 
 void scrollTextArr(const std::vector<String> msg, bool scrollX) {
+    debounceKeyboard();
     int posx = 1, posy = 0;
     bool change = true;
     int timer = 0;
@@ -208,6 +213,7 @@ void scrollTextArr(const std::vector<String> msg, bool scrollX) {
 }
 
 String scrollTextArrHighlight(const std::vector<String> msg, bool scrollX, int mainColor, int extraColor) {
+    debounceKeyboard();
     M5Cardputer.Lcd.setTextColor(mainColor);
     int posx = 1, posy = 0;
     int highlight = 0;

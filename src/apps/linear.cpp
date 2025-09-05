@@ -49,6 +49,7 @@ void linear() {
 	float b = b_string.toFloat()*20;
 
 	bool update = true;
+	bool debounce = false;
 	while (true) {
 		M5Cardputer.update();
 		if (M5Cardputer.Keyboard.isPressed()) {
@@ -73,7 +74,14 @@ void linear() {
 					case '/':
 						a-=0.1;
 						update = true;
+						break;
+					case 'd':
+						debounce = !debounce;
+						break;
 				}
+			}
+			if (debounce) {
+				debounceKeyboard();
 			}
 		}
 		if (update) {

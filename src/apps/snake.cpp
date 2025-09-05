@@ -78,7 +78,7 @@ void snakeGame() {
 			continue;
 		}
 
-		if (millis() - timer < 200) {
+		if (millis() - timer < 300) {
 			continue;
 		}
 		frameDirection = direction;
@@ -100,7 +100,7 @@ void snakeGame() {
 						else color = TFT_GREEN;
 						break;
 				}
-				M5Cardputer.Lcd.fillRect(i*PIXEL_SIZE, j*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE, color);
+				M5Cardputer.Lcd.fillRect(i*PIXEL_SIZE+1, j*PIXEL_SIZE+1, PIXEL_SIZE-2, PIXEL_SIZE-2, color);
 			}
 			if (update) {
 				M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
@@ -110,6 +110,7 @@ void snakeGame() {
 				update = false;
 			}
 		}
+
 
 		// update
 		switch (direction) {

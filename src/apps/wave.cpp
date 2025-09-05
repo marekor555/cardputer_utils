@@ -60,6 +60,7 @@ void wave() {
 
 	drawWave(freq/STEP_SIN, amp*STEP_SIN);
 	bool update = false;
+	bool debounce = false;
 	while (true) {
 		M5Cardputer.update();
 		if (M5Cardputer.Keyboard.isPressed()) {
@@ -85,8 +86,14 @@ void wave() {
 						freq += 0.1;
 						update = true;
 						break;
+					case 'd':
+						debounce = !debounce;
+						break;
 					default:
 						break;
+				}
+				if (debounce) {
+					debounceKeyboard();
 				}
 				if (update) {
 					drawWave(freq/STEP_SIN, amp*STEP_SIN);

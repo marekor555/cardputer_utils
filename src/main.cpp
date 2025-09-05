@@ -70,6 +70,7 @@ void drawCommands() {
 }
 
 void irSam() {
+    debounceKeyboard();
     Serial.println("Initializing ir");
     String options[] = {
         "; - vol+",
