@@ -9,10 +9,10 @@ float quadratic_equation(const float a, const float b, const float c, const floa
 	return a*x*x + b*x + c;
 }
 
-void drawQuadratic(const float a, const float b, const float c) {
+void drawQuadratic(float a, float b, float c) {
 	int positions[240];
 	for (int i = 0; i < 240; i++) {
-		positions[i] = quadratic_equation(-a,-b,-c,(i-120)/STEP) * STEP;
+		positions[i] = quadratic_equation(-a, -b,-c,(i-120)/STEP) * STEP;
 	}
 
 	constexpr int y_cent = 67;
@@ -49,9 +49,17 @@ void drawQuadratic(const float a, const float b, const float c) {
 	}
 	M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
 	M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
-	M5Cardputer.Lcd.drawString("A="+String(a), 10, 10);
+	float delta = (b*b)-4*a*c;
+
+	delta = (fabs(delta) < 0.01) ? 0 : delta;
+	a = (fabs(a) < 0.01) ? 0 : a;
+	b = (fabs(b) < 0.01) ? 0 : b;
+	c = (fabs(c) < 0.01) ? 0 : c;
+
+	M5Cardputer.Lcd.drawString("A="+ String(a), 10, 10);
 	M5Cardputer.Lcd.drawString("B="+String(b), 10, 20);
 	M5Cardputer.Lcd.drawString("C="+String(c), 10, 30);
+	M5Cardputer.Lcd.drawString("Delta="+String(delta), 10, 40);
 }
 
 void quadratic() {
@@ -76,11 +84,11 @@ void quadratic() {
 			if (!status.word.empty()) {
 				switch (status.word[0]) {
 					case ';':
-						c += 0.25;
+						c += 0.1;
 						update = true;
 						break;
 					case '.':
-						c -= 0.25;
+						c -= 0.1;
 						update = true;
 						break;
 					case ',':
@@ -101,6 +109,8 @@ void quadratic() {
 						break;
 					case 'd':
 						debounce = !debounce;
+						debounceKeyboard();
+						update = true;
 						break;
 					default:
 						break;

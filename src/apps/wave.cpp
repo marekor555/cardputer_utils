@@ -88,6 +88,7 @@ void wave() {
 						break;
 					case 'd':
 						debounce = !debounce;
+						debounceKeyboard();
 						break;
 					default:
 						break;

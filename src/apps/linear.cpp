@@ -77,6 +77,7 @@ void linear() {
 						break;
 					case 'd':
 						debounce = !debounce;
+						debounceKeyboard();
 						break;
 				}
 			}
