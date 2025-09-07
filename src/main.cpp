@@ -12,6 +12,7 @@
 std::vector<String> commandList = {
     "help",
     "snake",
+    "dino",
     "scan",
     "req",
     "music",
@@ -228,6 +229,8 @@ void loop() {
                 morse();
             } else if (text == "jammer") {
                 jammer();
+            } else if (text == "dino") {
+                dino();
             } else if (text == "help") {
                 std::vector<String> options = {
                     "scan      - scan and connect network",

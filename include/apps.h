@@ -71,6 +71,11 @@ void battery();
 */
 void jammer();
 
+/*
+ * dino game
+*/
+void dino();
+
 #define APPS_H
 
 #endif //APPS_H
