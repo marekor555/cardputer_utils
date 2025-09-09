@@ -76,6 +76,11 @@ void jammer();
 */
 void dino();
 
+/*
+ * calculator
+*/
+void calc();
+
 #define APPS_H
 
 #endif //APPS_H

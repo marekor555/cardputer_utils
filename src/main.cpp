@@ -20,6 +20,7 @@ std::vector<String> commandList = {
     "irSam",
     "tvOff",
     "rem",
+    "calc",
     "linear",
     "wave",
     "quadratic",
@@ -231,6 +232,8 @@ void loop() {
                 jammer();
             } else if (text == "dino") {
                 dino();
+            } else if (text == "calc") {
+                calc();
             } else if (text == "help") {
                 std::vector<String> options = {
                     "scan      - scan and connect network",
