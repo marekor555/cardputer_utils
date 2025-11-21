@@ -16,23 +16,34 @@ String filename = "";
 void playMusic() {
 	File musicFile = SD.open(viewPath + "/" + filename);
 	uint32_t sample_rate = 16000;
+	uint16_t num_channels, bits_per_sample;
+
+	musicFile.seek(22);
+	musicFile.readBytes(reinterpret_cast<char *>(&num_channels), 2);
+
 	musicFile.seek(24);
 	musicFile.readBytes(reinterpret_cast<char *>(&sample_rate), 4);
-	musicFile.seek(0);
 
-	auto cfg = M5Cardputer.Speaker.config();
-	cfg.sample_rate = sample_rate;
-	M5Cardputer.Speaker.config(cfg);
-
-	M5Cardputer.Speaker.begin();
-	int volume = 40;
-	M5Cardputer.Speaker.setVolume(volume);
-
+	musicFile.seek(34);
+	musicFile.readBytes(reinterpret_cast<char *>(&bits_per_sample), 2);
 
 	musicFile.seek(44);
-	uint8_t buffer[1024];
-	bool update = true;
 
+	uint32_t bytes_per_second = sample_rate * num_channels * (bits_per_sample / 8);
+
+	auto cfg = M5.Speaker.config();
+	cfg.sample_rate = sample_rate;
+	cfg.stereo = num_channels == 2;
+	M5.Speaker.config(cfg);
+	M5.Speaker.begin();
+
+	int volume = 40;
+	M5.Speaker.setVolume(volume);
+
+	uint8_t buffer[2048];
+	size_t bytes_to_read = 1024UL * num_channels;
+
+	bool update = true;
 	M5Cardputer.Lcd.setTextColor(SEC_FONT_COLOR);
 	M5Cardputer.Lcd.setTextSize(SEC_FONT_SIZE);
 	M5Cardputer.Lcd.fillScreen(TFT_BLACK);
@@ -63,6 +74,14 @@ void playMusic() {
 							M5Cardputer.Speaker.setVolume(volume);
 							update = true;
 							break;
+						case '/':
+							musicFile.seek(musicFile.position() + bytes_per_second * 5);
+							update = true;
+							break;
+						case ',':
+								if (musicFile.position() < bytes_per_second * 5) musicFile.seek(44);
+								else musicFile.seek(musicFile.position() - bytes_per_second * 5);
+								update = true;
 					}
 				}
 			}
@@ -72,13 +91,24 @@ void playMusic() {
 				update = false;
 			}
 
+			int bytesRead = musicFile.read(buffer, bytes_to_read);
+			if (musicFile.position() >= musicFile.size()) {
+				musicFile.close();
+				M5.Speaker.end();
+				return;
+			};
 
-			int bytesRead = musicFile.read(buffer, sizeof(buffer));
-			if (bytesRead <= 0) break;
 			bytesRead /= 2;
 			const auto ptr = reinterpret_cast<int16_t *>(buffer);
-			M5Cardputer.Speaker.playRaw(ptr, bytesRead, sample_rate);
-			while (M5Cardputer.Speaker.isPlaying()) {}
+			M5.Speaker.playRaw(ptr, bytesRead, sample_rate, (num_channels == 2));
+
+			M5.Display.fillRect(10, 40, 200, M5.Display.fontHeight(), TFT_BLACK);
+			M5.Display.drawString(
+				String(static_cast<float>(musicFile.size() - 44) / bytes_per_second, 1) + "/" + String(
+					static_cast<float>(musicFile.position() - 44) / bytes_per_second, 1) + "s",
+				10, 40);
+
+			while (M5.Speaker.isPlaying()) {}
 		}
 	musicFile.close();
 	M5Cardputer.Speaker.end();

@@ -3,6 +3,7 @@
 #include <vector>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
+#include <WiFi.h>
 
 #include "utils.h"
 #include "config.h"
